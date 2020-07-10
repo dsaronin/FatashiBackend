@@ -1,6 +1,6 @@
 #!/bin/bash --login
 # **********************************************************
-my_name="fatashi2"
+my_name="fatashi"
 # **********************************************************
 function print_blue()
 {
@@ -22,11 +22,11 @@ DSA_DICT="dsa_dictionary.txt"
 TUKI_DICT="tuki_kamusi.txt"
 # **********************************************************
 # -javaagent:/snap/intellij-idea-community/232/lib/idea_rt.jar=37957:/snap/intellij-idea-community/232/bin -Dfile.encoding=UTF-8 -classpath /home/daudi/IdeaProjects/FatashiLinux/out/production/FatashiLinux:/home/daudi/.local/share/JetBrains/IdeaIC2020.1/Kotlin/kotlinc/lib/kotlin-stdlib.jar:/home/daudi/.local/share/JetBrains/IdeaIC2020.1/Kotlin/kotlinc/lib/kotlin-reflect.jar:/home/daudi/.local/share/JetBrains/IdeaIC2020.1/Kotlin/kotlinc/lib/kotlin-test.jar:/home/daudi/.local/share/JetBrains/IdeaIC2020.1/Kotlin/kotlinc/lib/kotlin-stdlib-jdk7.jar:/home/daudi/.local/share/JetBrains/IdeaIC2020.1/Kotlin/kotlinc/lib/kotlin-stdlib-jdk8.jar:/home/daudi/IdeaProjects/FatashiLinux/lib/gson-2.8.6.jar:/home/daudi/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar Fatashi.FatashimainKt 
-JAR_PATH="out/artifacts/FatashiLinux_jar"
-APP_PATH="/home/daudi/IdeaProjects/FatashiLinux"
+JAR_PATH="out/artifacts/FatashiBackend_jar"
+APP_PATH="/home/daudi/IdeaProjects/FatashiBackend"
 cd $APP_PATH
 
-/home/daudi/.jdks/openjdk-14.0.1/bin/java -jar $APP_PATH/$JAR_PATH/FatashiLinux.jar  "-v -p"
+/home/daudi/.jdks/openjdk-14.0.1/bin/java -jar $APP_PATH/$JAR_PATH/FatashiBackend.jar  "-v -p"
 
 # **********************************************************
 

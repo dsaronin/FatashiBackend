@@ -1,6 +1,6 @@
 #!/bin/bash --login
 # **********************************************************
-my_name="fatashi"
+my_name="fatashi2"
 # **********************************************************
 function print_blue()
 {
@@ -21,7 +21,7 @@ function print_err()
 DSA_DICT="dsa_dictionary.txt"
 TUKI_DICT="tuki_kamusi.txt"
 # **********************************************************
-APP_PATH="/home/daudi/IdeaProjects/FatashiLinux"
+APP_PATH="/home/daudi/IdeaProjects/FatashiBackend"
 GSON_PATH="/home/daudi/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar"
 cd $APP_PATH
 
