@@ -1,0 +1,40 @@
+#!/bin/bash --login
+# **********************************************************
+my_name="fatashi"
+# **********************************************************
+function print_blue()
+{
+  echo  -e '\E[1;34m'"$1"'\E[1m\E[0m'
+}
+
+function print_warn()
+{
+  echo  -e '\E[1;32m'"$1"'\E[1m\E[0m'
+}
+
+function print_err()
+{
+  echo  -e '\E[1;31m'"$my_name: OOPS .. $1"'\E[1m\E[0m'
+}
+
+# **********************************************************
+DSA_DICT="dsa_dictionary.txt"
+TUKI_DICT="tuki_kamusi.txt"
+# **********************************************************
+APP_PATH="/home/daudi/IdeaProjects/FatashiLinux"
+GSON_PATH="/home/daudi/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar"
+cd $APP_PATH
+
+if [ -e "fatashi.jar" ] 
+then
+  /home/daudi/.jdks/openjdk-14.0.1/bin/java -jar fatashi.jar -classpath $APP_PATH/lib/gson-2.8.6.jar  "$@"
+else
+  print_warn "compiling fatashi kotlin..." 
+  if kotlinc src/Fatashi/*.kt -cp lib/gson-2.8.6.jar  -include-runtime -nowarn -d fatashi.jar ;
+  then
+    /home/daudi/.jdks/openjdk-14.0.1/bin/java -jar fatashi.jar -classpath $APP_PATH/lib/gson-2.8.6.jar "$@"
+  fi
+fi
+
+# **********************************************************
+

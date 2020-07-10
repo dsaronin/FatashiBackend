@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+use warnings;
+#
+while (<>) {
+
+  if ($_ =~ /^(\w+)\t/) {
+    $root = $1;
+    $_ =~ s/\~/$root/g;
+  }
+  print $_;
+  
+}
+
