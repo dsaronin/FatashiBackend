@@ -1,4 +1,4 @@
-package org.umoja4life.fatashiBackend
+package org.umoja4life.fatashibackend
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException

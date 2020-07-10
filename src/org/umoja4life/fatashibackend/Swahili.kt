@@ -1,4 +1,4 @@
-package org.umoja4life.fatashiBackend
+package org.umoja4life.fatashibackend
 
 // Swahili  -- control everything language-specific
 

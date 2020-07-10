@@ -1,4 +1,4 @@
-package org.umoja4life.fatashiBackend
+package org.umoja4life.fatashibackend
 
 // ANSI escape sequences for changing display colors
 

@@ -1,4 +1,4 @@
-package org.umoja4life.fatashiBackend
+package org.umoja4life.fatashibackend
 
 // Version -- manages version numbering for the application
 enum class Version(val vsn: Int)  {

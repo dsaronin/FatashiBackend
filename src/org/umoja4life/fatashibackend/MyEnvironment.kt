@@ -1,4 +1,4 @@
-package org.umoja4life.fatashiBackend
+package org.umoja4life.fatashibackend
 
 import java.io.File
 
@@ -101,9 +101,9 @@ object MyEnvironment {
     }
 
     // printInfo -- print something informative, wrapped in Blue
-    fun printInfo(s: String){
-        org.umoja4life.fatashiBackend.printInfo(s)
-    }
+//    fun printInfo(s: String){
+//        org.umoja4life.fatashibackend.printInfo(s)
+//    }
 
     // printUsageError -- print an error, wrapped in Red
     fun printUsageError(s: String) {
@@ -140,8 +140,8 @@ object MyEnvironment {
     private fun printHelp() {
         val argLine = "\$ ${myProps.appName} [<options>] \n  <options> ::= -v -d -n dddd --version --help \n  -v: verbose, -d: debug traces, -n: dictionary list lines <nn>"
 
-        org.umoja4life.fatashiBackend.printInfo("Usage and Argument line expected: ")
-        org.umoja4life.fatashiBackend.printInfo(argLine)
+        printInfo("Usage and Argument line expected: ")
+        printInfo(argLine)
     }
 
     // popValueOrDefault -- peeks ahead on LIFO and pops if valid value; else default

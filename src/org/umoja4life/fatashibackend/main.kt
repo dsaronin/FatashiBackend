@@ -82,7 +82,7 @@ object FatashiWork  {
             "ms"                       -> selectMethali(1)?.printStatus()
 
             "f", "flags"     -> MyEnvironment.printOptions()  // list options
-            "h", "help"      -> MyEnvironment.printInfo(helpList)
+            "h", "help"      -> printInfo(helpList)
             "v", "version"   -> Version.printMyVersion(" ")
             "o", "options"   -> MyEnvironment.printOptions()
 
