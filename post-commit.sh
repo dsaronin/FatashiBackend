@@ -1,8 +1,8 @@
 #! /bin/bash
 
 versionfile="VersionData.kt"
-projectpath="$HOME/IdeaProjects/FatashiLinux"
-filepath="$projectpath/src/org/umoja4life/fatashiBackend/$versionfile"
+projectpath="$HOME/IdeaProjects/FatashiBackend"
+filepath="$projectpath/src/org/umoja4life/fatashibackend/$versionfile"
 
 version_regex='(v[0-9]+\.[0-9]+\.[0-9]+)\s*(<.+>)?'
 

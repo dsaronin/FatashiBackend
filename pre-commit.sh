@@ -8,8 +8,8 @@
 # for example: a projectname -- robin, bluebird, apex, etc; VERSION_COMMENT will persist
 #
 versionfile="VersionData.kt"
-projectpath="$HOME/IdeaProjects/FatashiLinux"
-filepath="$projectpath/src/org/umoja4life/fatashiBackend/$versionfile"
+projectpath="$HOME/IdeaProjects/FatashiBackend"
+filepath="$projectpath/src/org/umoja4life/fatashibackend/$versionfile"
 
 version_regex='v([0-9]+)\.([0-9]+)\.([0-9]+)'
 git_string=$(git describe --tags)
@@ -55,7 +55,7 @@ unset BUMP_MAJOR_VERSION BUMP_MINOR_VERSION
 
 # cat  <<EOM
 cat > $filepath <<EOM
-package Fatashi
+package org.umoja4life.fatashibackend
 // *******************************************************************************
 // NOTE: this file is automatically updated by .git/hooks/pre-commit script
 // *******************************************************************************

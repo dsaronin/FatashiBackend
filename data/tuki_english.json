@@ -1,0 +1,18 @@
+{
+  "filename": "data/tuki_english.txt",
+  "kamusiType": "kamusi",
+  "kamusiLang": "kiswahili",
+  "fieldDelimiters": "\\t",
+  "wrapKeyHead":  "^[^\\t]*",
+  "wrapKeyTail":  "[^\\t]*\\t",
+  "wrapDefHead":  "^[^\\t]+\\t[^\\t]*",
+  "wrapDefTail":  "[^\\t]*$",
+  "wrapUsgHead":  "^[^\\t]+\\t[^\\t]*",
+  "wrapUsgTail":  "[^\\t]*$",
+  "hashtagOn": true,
+  "hashtagWrapPattern": "(#)",
+  "percentOn": true,
+  "ampersandOn": true,
+  "atsignOn": true,
+  "atsignWrapPattern": "{@}"
+}
