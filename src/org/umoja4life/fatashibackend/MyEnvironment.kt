@@ -22,6 +22,7 @@ object MyEnvironment {
 
     // myProps is read in from config_properties.json when singleton first accessed
     val myProps = ConfigProperties.readJsonConfigurations(CONFIG_PROPERTIES_FILE)
+    lateinit var myPlatform : PlatformIO
     val anchorHead       = ANCHOR_HEAD
     val anchorTail       = ANCHOR_TAIL
     var kamusiHead:  Kamusi? = null
@@ -37,7 +38,8 @@ object MyEnvironment {
 
     // setup -- initializes the environment
     // args -- are the cli argument list when invoked
-    fun setup(args: Array<String>): Unit {
+    fun setup(args: Array<String>, platformIO: PlatformIO): Unit {
+        myPlatform = platformIO
         parseArgList(args)
         if (myProps.debugFlag) printArgList(args)
         if (myProps.verboseFlag) printOptions()
@@ -140,8 +142,7 @@ object MyEnvironment {
     private fun printHelp() {
         val argLine = "\$ ${myProps.appName} [<options>] \n  <options> ::= -v -d -n dddd --version --help \n  -v: verbose, -d: debug traces, -n: dictionary list lines <nn>"
 
-        printInfo("Usage and Argument line expected: ")
-        printInfo(argLine)
+        printInfo("Usage and Argument line expected:\n$argLine")
     }
 
     // popValueOrDefault -- peeks ahead on LIFO and pops if valid value; else default

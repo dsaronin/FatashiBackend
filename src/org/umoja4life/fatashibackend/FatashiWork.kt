@@ -3,12 +3,12 @@ package org.umoja4life.fatashibackend
 // FatashiBackend -- a dictionary search & display package
 private const val DEBUG  = false
 
-// global expressions for output
-fun printInfo(s: String)   = println(AnsiColor.wrapCyan(s))
+// global expressions for output MyEnvironment.myPlatform.lineoutInfo
+fun printInfo(s: String)   = MyEnvironment.myPlatform.lineoutInfo(AnsiColor.wrapCyan(s))
 fun printPrompt(s: String) = print(AnsiColor.wrapYellow(s))
 fun printVisual(s: String) = print(AnsiColor.wrapGreen(s))
-fun printWarn(s: String)   = println(AnsiColor.wrapGreenBold(s))
-fun printError(s: String)  = println(AnsiColor.wrapRedBold(s))
+fun printWarn(s: String)   = MyEnvironment.myPlatform.lineoutInfo(AnsiColor.wrapGreenBold(s))
+fun printError(s: String)  = MyEnvironment.myPlatform.lineoutError(AnsiColor.wrapRedBold(s))
 
 // **************************************************************************
 // FatashiWork -- SINGLETON *************************************************
@@ -19,9 +19,8 @@ object FatashiWork  {
     private val helpList = "  tafuta, methali, list, browse, sts, options, help, quit, exit"
 
     // setupWork -- get things started, say hello to user
-    fun setupWork(args: Array<String>) {
+    fun setupWork() {
         Version.printMyVersion(" starting...")
-        MyEnvironment.setup(args)   // initialize app environment
     }
 
     // closedownWork -- shut things down; say good-bye to user

@@ -3,21 +3,18 @@ package org.umoja4life.fatashibackend
 interface PlatformIO {
     val myPath: String
 
-    fun lineoutInfo(s: String)
-    fun lineoutPrompt(s: String)
-    fun lineoutVisual(s: String)
-    fun lineoutWarn(s: String)
-    fun lineoutError(s: String)
+    fun lineoutInfo(s: String)   // simple line of info
+    fun lineoutError(s: String)  // simple line of error info
 
-    fun statusAlert(s: String)
+    fun infoAlert(s: String)     // info for an alert-type box
 
-    fun getCommandLine(prompt: String) : String
+    fun getCommandLine(prompt: String) :  List<String>   // prompt & get response
 
-    fun listout(l:List<String>)
+    fun listout(l:List<String>)   // display list of strings
 
-    fun getJSONConfig(f:String) : ConfigProperties
-    fun getJSONKamusiFormat(f:String) : KamusiFormat
+    fun getJSONConfig(f:String) : ConfigProperties    // get JSON for config properties
+    fun getJSONKamusiFormat(f:String) : KamusiFormat  // get JSON for KamusiFormat
 
-    fun getKamusiText(f:String) : String
+    fun getKamusiText(f:String) : String  // read a kamusi file
 
 }  // Interface
