@@ -6,7 +6,7 @@ private const val DEBUG  = false
 // global expressions for output via Platform implementation interface
 // example: MyEnvironment.myPlatform.lineoutInfo
 fun printInfo(s: String)   = MyEnvironment.myPlatform.lineoutInfo(AnsiColor.wrapCyan(s))
-fun printPrompt(s: String) = print(AnsiColor.wrapYellow(s))
+fun printPrompt(s: String) = MyEnvironment.myPlatform.putPrompt(AnsiColor.wrapYellow(s))
 fun printVisual(s: String) = print(AnsiColor.wrapGreen(s))
 fun printWarn(s: String)   = MyEnvironment.myPlatform.lineoutInfo(AnsiColor.wrapGreenBold(s))
 fun printError(s: String)  = MyEnvironment.myPlatform.lineoutError(AnsiColor.wrapRedBold(s))
@@ -33,9 +33,7 @@ object FatashiWork  {
     fun work() {
         do {
             printPrompt("${MyEnvironment.myProps.appName} > ")  // command prompt
-        } while ( parseCommands(
-                        readLine()?.trim()?.split(' ') ?: listOf("exit")
-                ) )
+        } while ( parseCommands(MyEnvironment.myPlatform.getCommandLine()) )
     } // fun work
 
     // parseCommands -- parses the command string and executes commands

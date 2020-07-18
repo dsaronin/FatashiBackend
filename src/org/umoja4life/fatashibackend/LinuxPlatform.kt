@@ -17,9 +17,16 @@ class LinuxPlatform : PlatformIO {
         println(s)
     }
 
-    override fun getCommandLine(prompt: String): List<String> {
-        print(AnsiColor.wrapYellow(prompt))
+    override fun infoAlert(l: List<String>) {
+        l.forEach { println(it) }
+    }
+
+    override fun getCommandLine(): List<String> {
         return readLine()?.trim()?.split(' ') ?: listOf("exit")
+    }
+
+    override fun putPrompt(prompt: String) {
+        print( prompt )
     }
 
     override fun listout(l: List<String>) {

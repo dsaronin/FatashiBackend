@@ -36,20 +36,8 @@ class ConfigProperties(
             try {
                 myProperties = gson.fromJson(File(f).readText(), myPropertiesType)
             }
-
-            catch (ex: JsonSyntaxException) {
-                println(ex)
-                println("file: $f: there's a JSON formatting error")
-                return ConfigProperties()
-            }
-
-            catch (ex: IOException) {
-                println(ex)
-                println("file: $f: caused an I/O Exception Error")
-                return ConfigProperties()
-            } catch (ex: Exception) {
-                println(ex)
-                println("file: $f: caused an Exception Error")
+            catch (ex: Exception) {
+                printError(ex.toString())
                 return ConfigProperties()
             }
 

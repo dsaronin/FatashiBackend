@@ -112,8 +112,9 @@ object MyEnvironment {
 
     // printArgList -- outputs the command line argument option flags
     private fun printArgList(args: Array<String>) {
-        myPlatform.lineoutInfo( if( args.isEmpty() ) "No args passed." else "My calling args are...")
-        for (i in args.indices ) myPlatform.lineoutInfo("args[$i] is: ${args[i]}")
+        var list = mutableListOf( if( args.isEmpty() ) "No args passed." else "My calling args are...")
+        for (i in args.indices ) list.add("args[$i] is: ${args[i]}")
+        myPlatform.infoAlert(list)
     }
 
     // printOptions -- display the current state of options

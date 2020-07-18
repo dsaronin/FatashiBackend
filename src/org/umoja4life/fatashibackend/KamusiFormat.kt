@@ -68,33 +68,13 @@ companion object {
             kamusiFormat = gson.fromJson( File(f).readText(), kamusiFormatType)
             MyEnvironment.printWarnIfDebug("$kamusiFormat")
         }
-        catch(ex: NumberFormatException){
-            println(ex)
-            println("file: $f: you're incorrectly specifying a number")
-            return KamusiFormat()
-        }
-
-        catch(ex: JsonSyntaxException){
-            println(ex)
-            println("file: $f: there's a JSON formatting error")
-            return KamusiFormat()
-        }
-
-        catch (ex: IOException) {
-            println(ex)
-            println("file: $f: caused an I/O Exception Error")
-            return KamusiFormat()
-        }
         catch(ex: Exception){
-            println(ex)
-            println("file: $f: caused an Exception Error")
+            printError(ex.toString())
             return KamusiFormat()
         }
 
         return kamusiFormat
     }
 }
-
-
 
 }  // class
