@@ -30,7 +30,7 @@ class LinuxPlatform : PlatformIO {
     }
 
     override fun listout(l: List<String>) {
-        TODO("Not yet implemented")
+        l.forEach { println(it) }
     }
 
     override fun getJSONConfig(f: String): ConfigProperties {
