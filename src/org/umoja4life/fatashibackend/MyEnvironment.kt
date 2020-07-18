@@ -127,7 +127,7 @@ object MyEnvironment {
     fun printOptions() {
         val optionList = "  verbose (%c), debug (%c), prod (%c) list n(%d)"
 
-        printInfo(
+        myPlatform.infoAlert(
                 optionList.format(
                         myProps.verboseFlag.toChar(),
                         myProps.debugFlag.toChar(),

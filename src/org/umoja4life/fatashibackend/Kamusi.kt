@@ -93,13 +93,16 @@ companion object {
 
     // printStatus -- output status of dictionary
     fun printStatus() {
-        printInfo("  ${myKamusiFormat.filename} has ${dictionary.count()} entries")
+        MyEnvironment.myPlatform.infoAlert(
+        "  ${myKamusiFormat.filename} has ${dictionary.count()} entries in ${totalPages()} pages."
+        )
     }
+
+    fun totalPages() = dictionary.count() / MyEnvironment.myProps.listLineCount
 
     // listRandom -- output a random page of dictionary internal representation
     fun listRandom() {
-        val totalPages: Int = dictionary.count() / MyEnvironment.myProps.listLineCount
-        val startPage: Int = (1..totalPages).random()
+        val startPage: Int = (1..totalPages() ).random()
         val startPageIndex = (startPage-1) * MyEnvironment.myProps.listLineCount
 
         listPage(startPage, startPageIndex)

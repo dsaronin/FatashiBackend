@@ -3,7 +3,8 @@ package org.umoja4life.fatashibackend
 // FatashiBackend -- a dictionary search & display package
 private const val DEBUG  = false
 
-// global expressions for output MyEnvironment.myPlatform.lineoutInfo
+// global expressions for output via Platform implementation interface
+// example: MyEnvironment.myPlatform.lineoutInfo
 fun printInfo(s: String)   = MyEnvironment.myPlatform.lineoutInfo(AnsiColor.wrapCyan(s))
 fun printPrompt(s: String) = print(AnsiColor.wrapYellow(s))
 fun printVisual(s: String) = print(AnsiColor.wrapGreen(s))
@@ -72,7 +73,7 @@ object FatashiWork  {
             "ms"                       -> selectMethali(1)?.printStatus()
 
             "f", "flags"     -> MyEnvironment.printOptions()  // list options
-            "h", "help"      -> printInfo(helpList)
+            "h", "help"      -> MyEnvironment.myPlatform.infoAlert(helpList)
             "v", "version"   -> Version.printMyVersion(" ")
             "o", "options"   -> MyEnvironment.printOptions()
 

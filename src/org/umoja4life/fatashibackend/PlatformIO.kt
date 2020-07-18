@@ -8,6 +8,7 @@ interface PlatformIO {
 
     fun infoAlert(s: String)     // info for an alert-type box
 
+    // massages and returns list of items: readLine()?.trim()?.split(' ') ?: listOf("exit")
     fun getCommandLine(prompt: String) :  List<String>   // prompt & get response
 
     fun listout(l:List<String>)   // display list of strings
