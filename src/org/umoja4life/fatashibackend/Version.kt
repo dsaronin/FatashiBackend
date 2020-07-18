@@ -20,7 +20,7 @@ enum class Version(val vsn: Int)  {
 
         // printMyVersion  -- and anything else supplied
         fun printMyVersion(strsuffix: String) {
-            printInfo("\n${MyEnvironment.myProps.appName} ${toVersion()} " + strsuffix)
+            MyEnvironment.myPlatform.infoAlert("\n${MyEnvironment.myProps.appName} ${toVersion()} " + strsuffix)
         }
     }
 }

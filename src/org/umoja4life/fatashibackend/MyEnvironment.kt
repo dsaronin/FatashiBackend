@@ -83,7 +83,6 @@ object MyEnvironment {
                 val flag = if(m.groupValues[1].isNotEmpty()) m.groupValues[1] else m.groupValues[2]
 
                 // flag is now the extracted flag
-                // println("extracted flag is: $flag")
                 when (flag) {
                     "n"             -> myProps.listLineCount = popValueOrDefault(lifo, LIST_LINE_COUNT.toString())
                     "v", "verbose"  -> myProps.verboseFlag = true
@@ -102,14 +101,8 @@ object MyEnvironment {
         }
     }
 
-    // printInfo -- print something informative, wrapped in Blue
-//    fun printInfo(s: String){
-//        org.umoja4life.fatashibackend.printInfo(s)
-//    }
-
     // printUsageError -- print an error, wrapped in Red
     fun printUsageError(s: String) {
-        // System.err.println >>> not used because of weirdness against prompt line
         printError("***** $s *****")
     }
 
@@ -119,8 +112,8 @@ object MyEnvironment {
 
     // printArgList -- outputs the command line argument option flags
     private fun printArgList(args: Array<String>) {
-        println( if( args.isEmpty() ) "No args passed." else "My calling args are...")
-        for (i in args.indices ) println("args[$i] is: ${args[i]}")
+        myPlatform.lineoutInfo( if( args.isEmpty() ) "No args passed." else "My calling args are...")
+        for (i in args.indices ) myPlatform.lineoutInfo("args[$i] is: ${args[i]}")
     }
 
     // printOptions -- display the current state of options
