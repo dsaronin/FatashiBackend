@@ -110,7 +110,7 @@ companion object {
 
     // listPage -- output a specific page of the dictionary starting at index
     private fun listPage( page: Int, index: Int) {
-        printInfo("Page $page from ${myKamusiFormat.filename}:")
+        // printInfo("Page $page from ${myKamusiFormat.filename}:")
             // sanity check on endIndex to make sure doesn't exceed number of lines
         var endIndex = index+ MyEnvironment.myProps.listLineCount
         if (endIndex >= dictionary.count()) endIndex = dictionary.count() - 1
@@ -120,6 +120,7 @@ companion object {
         printResults(
                 dictionary.slice((index until endIndex)),
                 """^([-~]?\w+[',’`]?\s?)+""".toRegex(RegexOption.IGNORE_CASE),
+                "Page $page from ${myKamusiFormat.filename}:",
                 false
         )
     }
@@ -173,7 +174,6 @@ companion object {
     fun searchKeyList(wordList: List<String>) {
         // for each search key in list, search the dictionary
         for (item in wordList) {
-            printDivider(">>>>>>>>> $item >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" )
                 // strip off the key fragment from the constraints
             val keyfrag = itemRegex.toRegex().find(item) ?: continue
                 // search the dictionary for that key fragment, after prepping the key
@@ -203,12 +203,8 @@ companion object {
                 else -> keyitem
             }
 
-            findByEntry( pattern, keyitem, typeConstraint )  // perform search, output results
+            findByEntry( pattern, keyitem, typeConstraint, item )  // perform search, output results
         }
-    }
-
-    private fun printDivider(s: String) {
-        if (MyEnvironment.myProps.verboseFlag) printVisual(s)
     }
 
     // findByEntry  -- searches all entries and returns list of matching entries
@@ -216,20 +212,21 @@ companion object {
     //   pattern: string of regex search pattern
     //   item: basic item (used for highlighting output)
     //   constraint: constraint to further limit the result list unless constraint.isEmpty()
-    fun findByEntry(pattern: String, item: String, constraint: String) {
+    fun findByEntry(pattern: String, item: String, constraint: String, rawitem: String) {
         // display the search pattern in a divider line
-        printDivider(">|$pattern|<<<<$constraint\n")
         val itemRegex = pattern.toRegex(RegexOption.IGNORE_CASE)  // convert key to regex
 
         // filter dictionary grabbing only records with a match
         val resList = getResults(itemRegex )  // start with this dictionary and follow chain
 
         printResults(
-                if( constraint.isEmpty() ) resList else {
-                    val conregex = constraint.toRegex(RegexOption.IGNORE_CASE)
-                    resList.filter { conregex.containsMatchIn(it) }
-                },
-                item.toRegex(RegexOption.IGNORE_CASE)
+            if( constraint.isEmpty() ) resList else {
+                val conregex = constraint.toRegex(RegexOption.IGNORE_CASE)
+                resList.filter { conregex.containsMatchIn(it) }
+            },
+            item.toRegex(RegexOption.IGNORE_CASE),
+            ">>>>>>>>> $rawitem >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>|$pattern|<<<<$constraint",
+            true
         )  // display results, if any found
     }
 
@@ -252,14 +249,18 @@ companion object {
     // args:
     //   res: list of dictionary entries with at least one match
     //   rex: the regex of the search key determining that match
-    fun printResults( res: List<String>, rex: Regex, divider: Boolean = true ){
+    fun printResults( res: List<String>, rex: Regex, title:String = "", trailer: Boolean = true ){
+         val list = mutableListOf<String>()
+
+        if (title.isNotBlank() && MyEnvironment.myProps.verboseFlag ) list.add(AnsiColor.wrapGreen(title))
         res.forEach {
-            // output each line after highlighting the found text
-            println( it
+            list.add( it
                     .replace(internalFields, showKeyDelim)
-                    .replace(rex) { AnsiColor.wrapBlueBold(it.groupValues[0]) } )
+                    .replace(rex) { AnsiColor.wrapBlueBold(it.groupValues[0]) }
+            )
         }
-        if (divider)  printDivider( "${res.size} results\n")
+        if (trailer && MyEnvironment.myProps.verboseFlag ) list.add( AnsiColor.wrapGreen(">>>>> ${res.size} results\n") )
+        MyEnvironment.myPlatform.listout(list)
     }
 
      /*

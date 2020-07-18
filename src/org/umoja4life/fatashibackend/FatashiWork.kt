@@ -7,7 +7,7 @@ private const val DEBUG  = false
 // example: MyEnvironment.myPlatform.lineoutInfo
 fun printInfo(s: String)   = MyEnvironment.myPlatform.lineoutInfo(AnsiColor.wrapCyan(s))
 fun printPrompt(s: String) = MyEnvironment.myPlatform.putPrompt(AnsiColor.wrapYellow(s))
-fun printVisual(s: String) = print(AnsiColor.wrapGreen(s))
+// fun printVisual(s: String) = print(AnsiColor.wrapGreen(s))
 fun printWarn(s: String)   = MyEnvironment.myPlatform.lineoutInfo(AnsiColor.wrapGreenBold(s))
 fun printError(s: String)  = MyEnvironment.myPlatform.lineoutError(AnsiColor.wrapRedBold(s))
 
