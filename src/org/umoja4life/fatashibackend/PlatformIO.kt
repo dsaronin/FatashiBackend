@@ -15,9 +15,7 @@ interface PlatformIO {
 
     fun listout(l:List<String>)   // display list of strings
 
-    fun getJSONConfig(f:String) : ConfigProperties    // get JSON for config properties
-    fun getJSONKamusiFormat(f:String) : KamusiFormat  // get JSON for KamusiFormat
-
     fun getKamusiText(f:String) : String  // read a kamusi file
+    suspend fun getFile(f:String) : String  // readText from a file
 
 }  // Interface

@@ -1,6 +1,14 @@
 package org.umoja4life.fatashibackend
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.IOException
+import java.util.logging.Logger
+
 class LinuxPlatform : PlatformIO {
+
+    private val Log: Logger = Logger.getLogger(LinuxPlatform::class.java.name)
 
     override val myPath: String
         get() = "data/"
@@ -11,6 +19,7 @@ class LinuxPlatform : PlatformIO {
 
     override fun lineoutError(s: String) {
         lineoutInfo(s)
+        Log.severe(s)
     }
 
     override fun infoAlert(s: String) {
@@ -33,17 +42,23 @@ class LinuxPlatform : PlatformIO {
         l.forEach { println(it) }
     }
 
-    override fun getJSONConfig(f: String): ConfigProperties {
-        TODO("Not yet implemented")
-    }
-
-    override fun getJSONKamusiFormat(f: String): KamusiFormat {
-        TODO("Not yet implemented")
-    }
-
     override fun getKamusiText(f: String): String {
         TODO("Not yet implemented")
     }
 
+        // getFile as readText()
+        // done thread-safe
+    override suspend fun getFile(f: String): String {
+        var result = ""
 
-}
+        withContext(Dispatchers.IO) {
+            try {
+                result = File(f).readText()
+            } catch (ex: IOException) {
+                printError("IOException: file: $f ex: $ex")
+            } // catch
+        } // Dispatchers.IO
+        return result
+    }
+
+}  // class LinuxPlatform

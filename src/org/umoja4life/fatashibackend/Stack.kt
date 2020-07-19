@@ -13,7 +13,7 @@ fun <T> stackOf(): MutableList<T> = mutableListOf()
  * Pushes item to [Stack]
  * @param item Item to be pushed
  */
-inline fun <T> Stack<T>.push(item: T) = add(item)
+fun <T> Stack<T>.push(item: T) = add(item)
 
 /**
  * Pops (removes and return) last item from [Stack]

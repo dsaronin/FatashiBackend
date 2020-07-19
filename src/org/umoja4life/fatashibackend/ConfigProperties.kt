@@ -24,15 +24,15 @@ class ConfigProperties(
     }
     companion object {
 
-        fun readJsonConfigurations(f: String, v: Boolean = false): ConfigProperties {
+        suspend fun readJsonConfigurations(f: String, v: Boolean = false): ConfigProperties {
             val myProperties: ConfigProperties
             val myPropertiesType = object : TypeToken<ConfigProperties>() {}.type
-            val gson = Gson()
 
             if (v) printWarn("Reading ConfigProperties file: $f")
 
             try {
-                myProperties = gson.fromJson(File(f).readText(), myPropertiesType)
+                myProperties = Gson()
+                    .fromJson(MyEnvironment.myPlatform.getFile(f), myPropertiesType)
             }
             catch (ex: Exception) {
                 printError(ex.toString())

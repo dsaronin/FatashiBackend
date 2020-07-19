@@ -38,9 +38,13 @@ object MyEnvironment {
 
     // setup -- initializes the environment
     // args -- are the cli argument list when invoked
-    fun setup(args: Array<String>, platformIO: PlatformIO): Unit {
-        myPlatform = platformIO
+    // platformIO -- the platform implementation for I/O: Linux or Android
+    // NOTE: expected to be called within CoroutineScope
+    suspend fun setup(args: Array<String>, platformIO: PlatformIO): Unit {
+        myPlatform = platformIO  // MUST ALWAYS BE DONE FIRST!!!
+            // vvvvvv  MUST ALWAYS BE DONE SECOND!!!  vvvvvvv
         myProps = ConfigProperties.readJsonConfigurations(CONFIG_PROPERTIES_FILE)
+
         parseArgList(args)
         if (myProps.debugFlag) printArgList(args)
         if (myProps.verboseFlag) printOptions()

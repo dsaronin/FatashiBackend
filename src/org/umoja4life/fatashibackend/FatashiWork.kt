@@ -97,7 +97,7 @@ object FatashiWork  {
 
         // loop thru looking at deeper levels as long as available
         while (level > 1 && kamusi?.nextKamusi != null ) {
-            kamusi = kamusi?.nextKamusi
+            kamusi = kamusi.nextKamusi
             level--
         }
         return kamusi
@@ -110,7 +110,7 @@ object FatashiWork  {
 
         // loop thru looking at deeper levels as long as available
         while (level > 1 && kamusi?.nextKamusi != null ) {
-            kamusi = kamusi?.nextKamusi
+            kamusi = kamusi.nextKamusi
             level--
         }
         return kamusi
