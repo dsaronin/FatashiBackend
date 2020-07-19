@@ -21,7 +21,7 @@ object MyEnvironment {
     // **************************************************************************
 
     // myProps is read in from config_properties.json when singleton first accessed
-    val myProps = ConfigProperties.readJsonConfigurations(CONFIG_PROPERTIES_FILE)
+    lateinit var myProps : ConfigProperties
     lateinit var myPlatform : PlatformIO
     val anchorHead       = ANCHOR_HEAD
     val anchorTail       = ANCHOR_TAIL
@@ -40,6 +40,7 @@ object MyEnvironment {
     // args -- are the cli argument list when invoked
     fun setup(args: Array<String>, platformIO: PlatformIO): Unit {
         myPlatform = platformIO
+        myProps = ConfigProperties.readJsonConfigurations(CONFIG_PROPERTIES_FILE)
         parseArgList(args)
         if (myProps.debugFlag) printArgList(args)
         if (myProps.verboseFlag) printOptions()

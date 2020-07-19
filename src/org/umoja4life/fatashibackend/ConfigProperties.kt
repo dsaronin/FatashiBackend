@@ -1,10 +1,8 @@
 package org.umoja4life.fatashibackend
 
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import java.io.File
-import java.io.IOException
 
 const val APP_NAME = "fatashi"    // app name used in prompt
 const val LIST_LINE_COUNT = 20   // how many lines of dict to list
