@@ -1,6 +1,5 @@
 package org.umoja4life.fatashibackend
 
-import java.io.File
 // copyright
 
 /***************************************************************************************
@@ -34,13 +33,13 @@ import java.io.File
 
 // Dictionary handles everything re dictionary database, but has no language-specific logic
 // requires a KamusiFormat object with kamusi-specific parameters
-data class Kamusi( val myKamusiFormat: KamusiFormat)  {
+data class Kamusi ( val myKamusiFormat: KamusiFormat)  {
 
     var nextKamusi: Kamusi? = null  // next in chain of kamusi's
     var lastBrowseIndex: Int = 0    // remember our last browse index
-    private val dictionary: List<String>    // kamusi data
+    private lateinit var dictionary: List<String>    // kamusi data
 
-    private val fieldDelimiter: Regex   // used to massage field delimiters to a standard
+    private lateinit var fieldDelimiter: Regex   // used to massage field delimiters to a standard
     private val keyModifiers = "#%&@"  // symbols to constrain searching
     private val escapeLiteral = "/"    // escapes a search term to force as-is
         // itemRegex below values kamusi search item requests  (see above comments)
@@ -51,34 +50,40 @@ data class Kamusi( val myKamusiFormat: KamusiFormat)  {
     private val showKeyDelim = "\t-- "   // our output standard to delimit fields
     private val spaceReplace = "_"       // underscores in keys are replaced by space
 
-// initialize by opening file, reading in raw dict, parsing fields, and splitting into records
     init {
-            // open file
-        val kamusiFile = File(myKamusiFormat.filename)
-    MyEnvironment.printWarnIfDebug("Opening Kamusi: $kamusiFile")
-            // make regex pattern for replacing with std field delimiters
         fieldDelimiter = Regex( myKamusiFormat.fieldDelimiters )
-            // read entire dict, replace all field delims with tab
-            // then split into list of individual lines
+    }
+
+    // initialize by opening file, reading in raw dict, parsing fields,
+    // and splitting into records
+    // because init {} cannot be SUSPEND, setup() MUST BE INVOKED FIRST upon
+    // Kamusi instantiation
+    suspend fun initialize() : Kamusi {
+        MyEnvironment.printWarnIfDebug("Opening Kamusi: ${myKamusiFormat.filename}")
+        // make regex pattern for replacing with std field delimiters
+
+        // read entire dict, replace all field delims with tab
+        // then split into list of individual lines
         dictionary = fieldDelimiter.replace(
-                kamusiFile.readText(),
+                MyEnvironment.myPlatform.getFile(myKamusiFormat.filename),
                 internalFields
         ).split(recordDelimiter)
 
-    }  // end init class
+        return this
+    }
 
-//************************************************************************************
+    //************************************************************************************
 //****** class-level methods         *****************************************************
 //************************************************************************************
 companion object {
-    
+
     // kamusiSetup -- recursively set up a list of kamusi's
     // return null if no more in list; else return the kamusi set up
-    fun kamusiSetup( kfList: Stack<KamusiFormat>): Kamusi? {
+    suspend fun kamusiSetup( kfList: Stack<KamusiFormat>): Kamusi? {
         
         val myFormat = kfList.pop() ?: return null  // end recursion at list end
 
-        val myKamusi = Kamusi(myFormat)  // load and setup this kamusi
+        val myKamusi = Kamusi(myFormat).initialize()  // load and setup this kamusi
 
             // setup remainder of list returning my child kamusi
         myKamusi.nextKamusi = kamusiSetup(kfList)  // remember child
