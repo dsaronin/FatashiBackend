@@ -54,14 +54,13 @@ data class Kamusi ( val myKamusiFormat: KamusiFormat)  {
         fieldDelimiter = Regex( myKamusiFormat.fieldDelimiters )
     }
 
-    // initialize by opening file, reading in raw dict, parsing fields,
-    // and splitting into records
-    // because init {} cannot be SUSPEND, setup() MUST BE INVOKED FIRST upon
-    // Kamusi instantiation
+    // initialize  -- MUST BE INVOKED FIRST upon Kamusi instantiation
+    // Opens kamusi datafile, reads in raw dict, parses fields, splits into records
+    // Unfortunately init {} cannot be SUSPEND, so initialization has to occur here
+    // note: API getFile is suspend and within scope(DISPATCHERS.IO)
     suspend fun initialize() : Kamusi {
         MyEnvironment.printWarnIfDebug("Opening Kamusi: ${myKamusiFormat.filename}")
         // make regex pattern for replacing with std field delimiters
-
         // read entire dict, replace all field delims with tab
         // then split into list of individual lines
         dictionary = fieldDelimiter.replace(

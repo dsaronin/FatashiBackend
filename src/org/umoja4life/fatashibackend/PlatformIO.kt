@@ -15,7 +15,6 @@ interface PlatformIO {
 
     fun listout(l:List<String>)   // display list of strings
 
-    fun getKamusiText(f:String) : String  // read a kamusi file
     suspend fun getFile(f:String) : String  // readText from a file
 
 }  // Interface

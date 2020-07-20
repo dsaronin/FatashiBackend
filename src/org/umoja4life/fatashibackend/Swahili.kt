@@ -20,5 +20,6 @@ object Swahili {
        return key.replace("l|r".toRegex(RegexOption.IGNORE_CASE), "[lr]")
                .replace("z".toRegex(RegexOption.IGNORE_CASE), "(z|dh)")
                .replace("^mu".toRegex(RegexOption.IGNORE_CASE), "m[uw]")
+               .replace("^h".toRegex(RegexOption.IGNORE_CASE), "h?")
    }
 }

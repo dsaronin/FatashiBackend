@@ -42,10 +42,6 @@ class LinuxPlatform : PlatformIO {
         l.forEach { println(it) }
     }
 
-    override fun getKamusiText(f: String): String {
-        TODO("Not yet implemented")
-    }
-
         // getFile as readText()
         // done thread-safe
     override suspend fun getFile(f: String): String {
