@@ -46,8 +46,11 @@ object MyEnvironment {
         myProps = ConfigProperties.readJsonConfigurations(CONFIG_PROPERTIES_FILE)
 
         parseArgList(args)
-        if (myProps.debugFlag) printArgList(args)
-        if (myProps.verboseFlag) printOptions()
+        
+        if (myProps.debugFlag) {
+            printArgList(args)
+            printOptions()
+        }
 
         // get the various KamusiFormat files for each kamusi
         KamusiFormat.kamusiFormatSetup(myProps.kamusiList, kamusiFormatList)
