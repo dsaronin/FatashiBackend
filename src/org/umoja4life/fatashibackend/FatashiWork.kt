@@ -67,7 +67,7 @@ object FatashiWork  {
                     ?.browsePage( cmdlist.drop(dropCount) )
 
             // dict/methali status
-            "s", "sts", "status" -> MyEnvironment.kamusiHead?.printStatus()
+            "s", "sts", "status" -> selectKamusi(1)?.printStatus()
             "ms"                       -> selectMethali(1)?.printStatus()
 
             "f", "flags"     -> MyEnvironment.printOptions()  // list options
@@ -77,7 +77,7 @@ object FatashiWork  {
 
             ""               -> loop = true   // empty line; NOP
             else        -> {  // treat it as tafuta lookup request
-                useKamusi = MyEnvironment.kamusiHead
+                useKamusi = selectKamusi(1)
                 dropCount = 0  // don't strip off a command
                 if (DEBUG) MyEnvironment.printUsageError("$cmd is unrecognizable")
             }
@@ -93,7 +93,7 @@ object FatashiWork  {
     private fun selectKamusi( n: Int ) : Kamusi? {
         var level = n
         var kamusi =
-                if (MyEnvironment.myProps.prodFlag) MyEnvironment.kamusiHead else MyEnvironment.testHead
+            if (MyEnvironment.myProps.prodFlag) MyEnvironment.kamusiHead else MyEnvironment.testHead
 
         // loop thru looking at deeper levels as long as available
         while (level > 1 && kamusi?.nextKamusi != null ) {

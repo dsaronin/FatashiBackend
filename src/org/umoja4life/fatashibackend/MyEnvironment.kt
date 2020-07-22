@@ -46,7 +46,7 @@ object MyEnvironment {
         myProps = ConfigProperties.readJsonConfigurations(CONFIG_PROPERTIES_FILE)
 
         parseArgList(args)
-        
+
         if (myProps.debugFlag) {
             printArgList(args)
             printOptions()
