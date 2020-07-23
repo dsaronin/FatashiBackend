@@ -124,8 +124,7 @@ companion object {
         printResults(
                 dictionary.slice((index until endIndex)),
                 """^([-~]?\w+[',’`]?\s?)+""".toRegex(RegexOption.IGNORE_CASE),
-                "Page $page from ${myKamusiFormat.filename}:",
-                false
+                "Page $page from ${myKamusiFormat.filename}:"
         )
     }
 
@@ -229,8 +228,7 @@ companion object {
                 resList.filter { conregex.containsMatchIn(it) }
             },
             item.toRegex(RegexOption.IGNORE_CASE),
-            ">>>>>>>>> $rawitem >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>|$pattern|<<<<$constraint",
-            true
+            "\n>>>>> $rawitem >>>>> |$pattern| >>>$constraint>>> "
         )  // display results, if any found
     }
 
@@ -253,17 +251,18 @@ companion object {
     // args:
     //   res: list of dictionary entries with at least one match
     //   rex: the regex of the search key determining that match
-    fun printResults( res: List<String>, rex: Regex, title:String = "", trailer: Boolean = true ){
+    fun printResults( res: List<String>, rex: Regex, title:String = ""){
          val list = mutableListOf<String>()
 
-        if (title.isNotBlank() && MyEnvironment.myProps.verboseFlag ) list.add(AnsiColor.wrapGreen(title))
+        if (title.isNotBlank() && MyEnvironment.myProps.verboseFlag ) {
+            list.add(AnsiColor.wrapGreen(title + "[${res.size}]"))
+        }
         res.forEach {
             list.add( it
                     .replace(internalFields, showKeyDelim)
                     .replace(rex) { AnsiColor.wrapBlueBold(it.groupValues[0]) }
             )
         }
-        if (trailer && MyEnvironment.myProps.verboseFlag ) list.add( AnsiColor.wrapGreen(">>>>> ${res.size} results\n") )
         MyEnvironment.myPlatform.listout(list)
     }
 

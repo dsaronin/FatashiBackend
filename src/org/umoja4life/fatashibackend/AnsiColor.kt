@@ -82,6 +82,10 @@ enum class AnsiColor(val code: String) {
     }
 
     companion object {
+            // ansiPattern can be used to de-wrap a string
+        val ansiPattern = """\[(\d;)?\d+m"""
+        val ansiRegex = ansiPattern.toRegex()
+
         fun wrapCyan(str: String) = ANSI_CYAN.toString() + str + ANSI_RESET.toString()
         fun wrapCyanBold(str: String) = CYAN_BOLD.toString() + str + ANSI_RESET.toString()
 
@@ -96,6 +100,8 @@ enum class AnsiColor(val code: String) {
 
         fun wrapYellow(str: String) = ANSI_YELLOW.toString() + str + ANSI_RESET.toString()
         fun wrapYellowBold(str: String) = YELLOW_BOLD.toString() + str + ANSI_RESET.toString()
+
+
     }
 
 }
