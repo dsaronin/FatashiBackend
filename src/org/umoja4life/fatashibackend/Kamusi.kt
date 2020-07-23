@@ -228,7 +228,7 @@ companion object {
                 resList.filter { conregex.containsMatchIn(it) }
             },
             item.toRegex(RegexOption.IGNORE_CASE),
-            "\n>>>>> $rawitem >>>>> |$pattern| >>>$constraint>>> "
+            ">>>>> $rawitem\t>>>>> |$pattern|\t>>>$constraint>>> "
         )  // display results, if any found
     }
 
