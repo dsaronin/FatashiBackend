@@ -124,7 +124,7 @@ companion object {
         printResults(
                 dictionary.slice((index until endIndex)),
                 """^([-~]?\w+[',’`]? ?)+""".toRegex(RegexOption.IGNORE_CASE),
-                "Page $page from ${myKamusiFormat.filename}: "
+                ">>>>> Page $page\tfrom ${myKamusiFormat.filename}:\t"
         )
     }
 
