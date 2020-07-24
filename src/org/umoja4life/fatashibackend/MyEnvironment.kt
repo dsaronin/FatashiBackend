@@ -63,6 +63,12 @@ object MyEnvironment {
         testHead = Kamusi.kamusiSetup(testFormatList)
     }
 
+        // replacePlatform  --
+        // each Android Activity lifecycle requires a refreshed AndroidPlatform
+        // NEEDS to be done when other requests are not pending
+    fun replacePlatform(platformIO: PlatformIO) {
+        myPlatform = platformIO
+    }
 
     // regex recognizer for short/long flags and extracts the flag w/o punctuation
     private val flag_regex = Regex("""--?(\w\b|\w+)""")
