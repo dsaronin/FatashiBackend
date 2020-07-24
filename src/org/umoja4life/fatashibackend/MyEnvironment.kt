@@ -92,7 +92,7 @@ object MyEnvironment {
 
                 // flag is now the extracted flag
                 when (flag) {
-                    "n"             -> myProps.listLineCount = popValueOrDefault(lifo, LIST_LINE_COUNT.toString())
+                    "n"             -> myProps.setLineCount(popValueOrDefault(lifo, LIST_LINE_COUNT.toString()))
                     "v", "verbose"  -> myProps.verboseFlag = true
                     "d", "debug"    -> myProps.debugFlag = true
                     "p", "prod"     -> myProps.prodFlag = true

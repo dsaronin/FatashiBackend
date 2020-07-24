@@ -17,11 +17,26 @@ class ConfigProperties(
         var methaliList: Stack<String> = mutableListOf<String>(),  // ordered filenames for methali dicts
         var testList: Stack<String> = mutableListOf<String>()   // ordered filenames for test dicts
 ) {
+        var clampResults = LIST_LINE_COUNT + LIST_LINE_COUNT  // used to clamp max results for any single search
+
     init {
         // force sanity on some values
-        if (listLineCount <= 3) listLineCount = LIST_LINE_COUNT
+        setLineCount( listLineCount )
         if (appName.isBlank()) appName = APP_NAME
+    }  // init block
+
+        // clamps output results to 2x listline count to avoid 100s of lines of output
+    fun setClampResults() {
+        clampResults = listLineCount + listLineCount
     }
+
+        // setLineCount -- sets the linecount and performs sanity checks
+    fun setLineCount(n: Int) {
+        listLineCount = n
+        if (n <= 3) listLineCount = LIST_LINE_COUNT
+        setClampResults()
+    }
+
     companion object {
 
         suspend fun readJsonConfigurations(f: String, v: Boolean = false): ConfigProperties {
@@ -41,5 +56,6 @@ class ConfigProperties(
 
             return myProperties
         }
-    }
-}
+    }  // companion object
+
+} // class ConfigProperties

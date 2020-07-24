@@ -123,8 +123,8 @@ companion object {
         // use printResults to highlight the entry item
         printResults(
                 dictionary.slice((index until endIndex)),
-                """^([-~]?\w+[',’`]?\s?)+""".toRegex(RegexOption.IGNORE_CASE),
-                "Page $page from ${myKamusiFormat.filename}:"
+                """^([-~]?\w+[',’`]? ?)+""".toRegex(RegexOption.IGNORE_CASE),
+                "Page $page from ${myKamusiFormat.filename}: "
         )
     }
 
@@ -257,12 +257,19 @@ companion object {
         if (title.isNotBlank() && MyEnvironment.myProps.verboseFlag ) {
             list.add(AnsiColor.wrapGreen(title + "[${res.size}]"))
         }
-        res.forEach {
-            list.add( it
-                    .replace(internalFields, showKeyDelim)
-                    .replace(rex) { AnsiColor.wrapBlueBold(it.groupValues[0]) }
+        res
+            .subList(
+                0,
+                if (MyEnvironment.myProps.clampResults > res.size)
+                    res.size
+                else MyEnvironment.myProps.clampResults
             )
-        }
+            .forEach {
+                list.add( it
+                        .replace(rex) { AnsiColor.wrapBlueBold(it.groupValues[0]) }
+                        .replace(internalFields, showKeyDelim)
+                )
+            }
         MyEnvironment.myPlatform.listout(list)
     }
 
