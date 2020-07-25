@@ -39,7 +39,7 @@ data class Kamusi ( val myKamusiFormat: KamusiFormat)  {
     var lastBrowseIndex: Int = 0    // remember our last browse index
     private lateinit var dictionary: List<String>    // kamusi data
 
-    private lateinit var fieldDelimiter: Regex   // used to massage field delimiters to a standard
+    var fieldDelimiter: Regex   // used to massage field delimiters to a standard
     private val keyModifiers = "#%&@"  // symbols to constrain searching
     private val escapeLiteral = "/"    // escapes a search term to force as-is
         // itemRegex below values kamusi search item requests  (see above comments)
@@ -239,7 +239,8 @@ companion object {
                 resList.filter { conregex.containsMatchIn(it) }
             },
             item.toRegex(RegexOption.IGNORE_CASE),
-            ">>>>> $rawitem\t>>>>> |$pattern|\t>>>$constraint>>> "
+            ">>>>> $rawitem\t>>>>> |$pattern|\t>>>$constraint>>> ",
+            clearBuffer
         )  // display results, if any found
     }
 

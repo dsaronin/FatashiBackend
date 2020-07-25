@@ -13,7 +13,7 @@ interface PlatformIO {
     fun getCommandLine() :  List<String>   // get & trim response
     fun putPrompt(prompt: String)     // output the prompt to prime for next command
 
-    fun listout(l:List<String>, clearBuffer:Boolean = true)   // display list of strings
+    fun listout(l:List<String>, clearBuffer:Boolean)   // display list of strings
 
     suspend fun getFile(f:String) : String  // readText from a file
 
