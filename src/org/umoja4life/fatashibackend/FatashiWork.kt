@@ -67,7 +67,8 @@ object FatashiWork  {
                     ?.browsePage( cmdlist.drop(dropCount) )
 
             // dict/methali status
-            "s", "sts", "status" -> selectKamusi(1)?.printStatus()
+            "sts", "status" -> selectKamusi(1)?.printStatus()
+            "s","ss","sss","ssss"   -> selectKamusi(cmd.length)?.printStatus()
             "ms"                       -> selectMethali(1)?.printStatus()
 
             "f", "flags"     -> MyEnvironment.printOptions()  // list options
@@ -93,7 +94,9 @@ object FatashiWork  {
     private fun selectKamusi( n: Int ) : Kamusi? {
         var level = n
         var kamusi =
-            if (MyEnvironment.myProps.prodFlag) MyEnvironment.kamusiHead else MyEnvironment.testHead
+            if (MyEnvironment.myProps.prodFlag  &&
+                MyEnvironment.kamusiHead != null
+            ) MyEnvironment.kamusiHead else MyEnvironment.testHead
 
         // loop thru looking at deeper levels as long as available
         while (level > 1 && kamusi?.nextKamusi != null ) {

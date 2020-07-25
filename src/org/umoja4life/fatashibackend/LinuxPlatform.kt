@@ -38,7 +38,7 @@ class LinuxPlatform : PlatformIO {
         print( prompt )
     }
 
-    override fun listout(l: List<String>) {
+    override fun listout(l: List<String>, clearBuffer:Boolean) {
         l.forEach { println(it) }
     }
 

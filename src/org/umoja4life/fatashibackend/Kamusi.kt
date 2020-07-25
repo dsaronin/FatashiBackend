@@ -175,6 +175,8 @@ companion object {
  */
     // searchKeyList -- searches dictionary using List of Keys
     fun searchKeyList(wordList: List<String>) {
+        var clearBuffer = true  // first time thru, show that prev results buffer should be cleared
+
         // for each search key in list, search the dictionary
         for (item in wordList) {
                 // strip off the key fragment from the constraints
@@ -206,7 +208,8 @@ companion object {
                 else -> keyitem
             }
 
-            findByEntry( pattern, keyitem, typeConstraint, item )  // perform search, output results
+            findByEntry( pattern, keyitem, typeConstraint, item, clearBuffer )  // perform search, output results
+            clearBuffer = false   // flip buffer-clear switch, further requests are appends to results
         }
     }
 
@@ -215,7 +218,15 @@ companion object {
     //   pattern: string of regex search pattern
     //   item: basic item (used for highlighting output)
     //   constraint: constraint to further limit the result list unless constraint.isEmpty()
-    fun findByEntry(pattern: String, item: String, constraint: String, rawitem: String) {
+    //   rawitem: item as appears in search list
+    //   clearBuffer: true if output results buffer should be cleared before results added
+    fun findByEntry(
+            pattern: String,
+            item: String,
+            constraint: String,
+            rawitem: String,
+            clearBuffer: Boolean
+    ) {
         // display the search pattern in a divider line
         val itemRegex = pattern.toRegex(RegexOption.IGNORE_CASE)  // convert key to regex
 
@@ -251,7 +262,8 @@ companion object {
     // args:
     //   res: list of dictionary entries with at least one match
     //   rex: the regex of the search key determining that match
-    fun printResults( res: List<String>, rex: Regex, title:String = ""){
+    //   clearBuffer: true means output results buffer should be cleared before results
+    fun printResults( res: List<String>, rex: Regex, title:String = "", clearBuffer: Boolean = true){
          val list = mutableListOf<String>()
 
         if (title.isNotBlank() && MyEnvironment.myProps.verboseFlag ) {
@@ -270,7 +282,7 @@ companion object {
                         .replace(internalFields, showKeyDelim)
                 )
             }
-        MyEnvironment.myPlatform.listout(list)
+        MyEnvironment.myPlatform.listout(list, clearBuffer)
     }
 
      /*
