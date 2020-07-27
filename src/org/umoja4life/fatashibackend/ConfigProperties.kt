@@ -37,6 +37,11 @@ class ConfigProperties(
         setClampResults()
     }
 
+        // isNotViable -- returns true if there are no Kamusi Format lists
+    fun isNotViable() : Boolean {
+        return (kamusiList.isEmpty() && methaliList.isEmpty() && testList.isEmpty())
+    }
+
     companion object {
 
         suspend fun readJsonConfigurations(f: String, v: Boolean = false): ConfigProperties {

@@ -57,4 +57,8 @@ class LinuxPlatform : PlatformIO {
         return result
     }
 
+    override fun getFrontVersion(): String {
+        return "(c) 2020 David S. Anderson, All Rights Reserved"
+    }
+
 }  // class LinuxPlatform

@@ -7,7 +7,11 @@ import kotlinx.coroutines.*
 fun main(args: Array<String>) {
     runBlocking {
         launch {
-            MyEnvironment.setup(args, LinuxPlatform() )   // initialize app environment
+            val myPlatform = LinuxPlatform()
+            MyEnvironment.setup(args, myPlatform)   // initialize app environment
+                // if any type of I/O error or empty config info,
+                // then setup for running from sample data as a default kamusi
+            if (MyEnvironment.isNotViable() ) MyEnvironment.nofileSetup(args, myPlatform)
         }
     }
     FatashiWork.setupWork()

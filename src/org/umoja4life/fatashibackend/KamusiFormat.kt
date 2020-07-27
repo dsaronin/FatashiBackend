@@ -6,6 +6,8 @@ import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.IOException
 
+private const val DUMMYSTUB = "sample-kamusi"
+
 data class KamusiFormat(
         val filename: String,
         val kamusiType: String,
@@ -27,13 +29,14 @@ data class KamusiFormat(
 ) {
     // secondary constructor for instantiating empty object
         constructor() : this(
-                "", "", "",
-                "","","",
-                "","",
-                "","",
-                false, "",
-                false,false,
-                false, "",
+            DUMMYSTUB, "kamusi", "kiswahili",
+                "(\\s+--\\s+)|(\\t__[ \\t\\x0B\\f]+)",
+            "^[^\\t]*","[^\\t]*\\t",
+                "^[^\\t]+\\t[^\\t]*","[^\\t]*\\t",
+                "^[^\\t]+\\t[^\\t]+\\t[^\\t]*","[^\\t]*\$",
+                true, "(#)",
+                true,true,
+                true, "{@}",
                 true  // flag this is an empty object
         )
 

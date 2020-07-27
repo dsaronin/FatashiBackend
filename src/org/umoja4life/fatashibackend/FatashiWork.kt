@@ -73,7 +73,7 @@ object FatashiWork  {
 
             "f", "flags"     -> MyEnvironment.printOptions()  // list options
             "h", "help"      -> MyEnvironment.myPlatform.infoAlert(helpList)
-            "v", "version"   -> Version.printMyVersion(" ")
+            "v", "version"   -> Version.printMyVersion(MyEnvironment.myPlatform.getFrontVersion())
             "o", "options"   -> MyEnvironment.printOptions()
 
             ""               -> loop = true   // empty line; NOP

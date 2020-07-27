@@ -17,4 +17,6 @@ interface PlatformIO {
 
     suspend fun getFile(f:String) : String  // readText from a file
 
+    fun getFrontVersion() : String  // gets FrontEnd Version information
+
 }  // Interface

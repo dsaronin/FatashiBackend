@@ -63,7 +63,25 @@ object MyEnvironment {
         testHead = Kamusi.kamusiSetup(testFormatList)
     }
 
-        // replacePlatform  --
+    fun nofileSetup(args: Array<String>, platformIO: PlatformIO) : Unit {
+        myPlatform = platformIO // MUST ALWAYS BE DONE FIRST!!!
+        myProps = ConfigProperties()  // using default values
+        parseArgList(args)          // parse an args list
+        testHead = Kamusi.nofileSetup( KamusiFormat(), dummyKamusiString )
+    }
+
+    // isNotViable  -- returns true if system doesn't have viable kamusi data
+    // a variety of factors could cause this: problems in reading files, etc
+    fun isNotViable() : Boolean {
+        return (
+                myProps.isNotViable() ||
+               ( (kamusiHead?.isNotViable() ?: true) &&
+                 (testHead?.isNotViable()   ?: true)
+               )
+        )
+    }
+
+    // replacePlatform  --
         // each Android Activity lifecycle requires a refreshed AndroidPlatform
         // NEEDS to be done when other requests are not pending
     fun replacePlatform(platformIO: PlatformIO) {

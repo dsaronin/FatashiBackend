@@ -81,7 +81,6 @@ companion object {
     suspend fun kamusiSetup( kfList: Stack<KamusiFormat>): Kamusi? {
         
         val myFormat = kfList.pop() ?: return null  // end recursion at list end
-
         val myKamusi = Kamusi(myFormat).initialize()  // load and setup this kamusi
 
             // setup remainder of list returning my child kamusi
@@ -89,11 +88,26 @@ companion object {
 
         return myKamusi   // return myself
     }
+
+        // nofileSetup -- simply sets up a kamusi with builtin sample data
+    fun nofileSetup( myFormat: KamusiFormat, myKamusiText : String ): Kamusi {
+        val myKamusi = Kamusi(myFormat)
+        with (myKamusi) {
+            dictionary = fieldDelimiter.replace(myKamusiText, internalFields)
+                            .split(recordDelimiter)
+        }
+        return myKamusi
+    }
 } // end companion
 
 //************************************************************************************
 //****** utility methods         *****************************************************
 //************************************************************************************
+    // isNotViable  -- returns true if all of self & children are not viable dictionaries
+    // RECURSIVE
+    // note: first viable kamusi will disrupt the recursion
+    // and last in chain is null, so will disrupt the chain
+    fun isNotViable() : Boolean = ( dictionary.isEmpty() && (nextKamusi?.isNotViable() ?: true) )
 
     // printStatus -- output status of dictionary
     fun printStatus() {
