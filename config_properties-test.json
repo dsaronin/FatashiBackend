@@ -1,0 +1,10 @@
+{
+  "appName": "fatashi",
+  "listLineCount": 25,
+  "verboseFlag": false,
+  "debugFlag": false,
+  "prodFlag": false,
+  "kamusiList": ["dsa_dictionary.json", "tuki_kamusi.json", "tuki_english.json"],
+  "methaliList": ["data/methali_kamusi.json"],
+  "testList": ["tempdict.json"]
+}

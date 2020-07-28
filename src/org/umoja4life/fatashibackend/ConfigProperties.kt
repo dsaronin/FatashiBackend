@@ -4,6 +4,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 
+private const val DEBUG = false
+
 const val APP_NAME = "fatashi"    // app name used in prompt
 const val LIST_LINE_COUNT = 20   // how many lines of dict to list
 
@@ -39,24 +41,25 @@ class ConfigProperties(
 
         // isNotViable -- returns true if there are no Kamusi Format lists
     fun isNotViable() : Boolean {
-        return (kamusiList.isEmpty() && methaliList.isEmpty() && testList.isEmpty())
+        return (kamusiList.isEmpty() && testList.isEmpty())
     }
 
     companion object {
 
         suspend fun readJsonConfigurations(f: String, v: Boolean = false): ConfigProperties {
-            val myProperties: ConfigProperties
+            var myProperties = ConfigProperties()
             val myPropertiesType = object : TypeToken<ConfigProperties>() {}.type
 
-            if (v) printWarn("Reading ConfigProperties file: $f")
+            if (DEBUG) if (v) printWarn("Reading ConfigProperties file: $f")
 
             try {
-                myProperties = Gson()
-                    .fromJson(MyEnvironment.myPlatform.getFile(f), myPropertiesType)
+                val text = MyEnvironment.myPlatform.getFile(f)
+                if( text.isNotBlank() ) {
+                    myProperties = Gson().fromJson(text, myPropertiesType)
+                }
             }
             catch (ex: Exception) {
                 printError(ex.toString())
-                return ConfigProperties()
             }
 
             return myProperties

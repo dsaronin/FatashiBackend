@@ -1,5 +1,7 @@
 package org.umoja4life.fatashibackend
 
+private const val DEBUG = false
+
 // copyright
 
 /***************************************************************************************
@@ -59,7 +61,7 @@ data class Kamusi ( val myKamusiFormat: KamusiFormat)  {
     // Unfortunately init {} cannot be SUSPEND, so initialization has to occur here
     // note: API getFile is suspend and within scope(DISPATCHERS.IO)
     suspend fun initialize() : Kamusi {
-        MyEnvironment.printWarnIfDebug("Opening Kamusi: ${myKamusiFormat.filename}")
+        if (DEBUG) MyEnvironment.printWarnIfDebug("Opening Kamusi: ${myKamusiFormat.filename}")
         // make regex pattern for replacing with std field delimiters
         // read entire dict, replace all field delims with tab
         // then split into list of individual lines
@@ -67,6 +69,11 @@ data class Kamusi ( val myKamusiFormat: KamusiFormat)  {
                 MyEnvironment.myPlatform.getFile(myKamusiFormat.filename),
                 internalFields
         ).split(recordDelimiter)
+
+        if( dictionary.size == 1 && dictionary.first().isBlank() ) {
+            dictionary = mutableListOf()  // make empty to show isNotViable
+        }
+        if (DEBUG) MyEnvironment.printWarnIfDebug("Kamusi isNotViable: ${dictionary.isEmpty()}")
 
         return this
     }
@@ -107,7 +114,9 @@ companion object {
     // RECURSIVE
     // note: first viable kamusi will disrupt the recursion
     // and last in chain is null, so will disrupt the chain
-    fun isNotViable() : Boolean = ( dictionary.isEmpty() && (nextKamusi?.isNotViable() ?: true) )
+    fun isNotViable() : Boolean {
+        return (dictionary.isEmpty() && (nextKamusi?.isNotViable() ?: true))
+    }
 
     // printStatus -- output status of dictionary
     fun printStatus() {

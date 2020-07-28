@@ -6,6 +6,8 @@ import java.io.File
 import java.io.IOException
 import java.util.logging.Logger
 
+private const val DEBUG = false
+
 class LinuxPlatform : PlatformIO {
 
     private val Log: Logger = Logger.getLogger(LinuxPlatform::class.java.name)
@@ -18,7 +20,7 @@ class LinuxPlatform : PlatformIO {
     }
 
     override fun lineoutError(s: String) {
-        lineoutInfo(s)
+        // lineoutInfo(s)
         Log.severe(s)
     }
 
@@ -44,16 +46,20 @@ class LinuxPlatform : PlatformIO {
 
         // getFile as readText()
         // done thread-safe
+        // returns input string or "" if input failure
     override suspend fun getFile(f: String): String {
         var result = ""
+        val file = File(f)
 
-        withContext(Dispatchers.IO) {
-            try {
-                result = File(f).readText()
-            } catch (ex: IOException) {
-                printError("IOException: file: $f ex: $ex")
-            } // catch
-        } // Dispatchers.IO
+        if( f.isNotBlank() && file.exists() ) { // skip if nofilename or no file
+            withContext(Dispatchers.IO) {
+                try {
+                    result = file.readText()
+                } catch (ex: IOException) {
+                    if (DEBUG) printError(">>>>> IOException: file: $f ex: $ex")
+                } // catch
+            } // Dispatchers.IO
+        }
         return result
     }
 

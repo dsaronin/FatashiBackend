@@ -2,6 +2,9 @@ package org.umoja4life.fatashibackend
 
 import java.io.File
 
+private const val DUMMYSTUB = "sample-kamusi"
+private const val DEBUG = false
+
 fun Boolean.toChar() = this.toString().first()
 
 // **************************************************************************
@@ -64,10 +67,23 @@ object MyEnvironment {
     }
 
     fun nofileSetup(args: Array<String>, platformIO: PlatformIO) : Unit {
+        if (DEBUG)  printWarnIfDebug("MyEnv: nofileSetup started")
         myPlatform = platformIO // MUST ALWAYS BE DONE FIRST!!!
         myProps = ConfigProperties()  // using default values
         parseArgList(args)          // parse an args list
-        testHead = Kamusi.nofileSetup( KamusiFormat(), dummyKamusiString )
+        val myKF = KamusiFormat(
+                DUMMYSTUB, "kamusi", "kiswahili",
+                "(\\s+--\\s+)|(\\t__[ \\t\\x0B\\f]+)",
+                "^[^\\t]*","[^\\t]*\\t",
+                "^[^\\t]+\\t[^\\t]*","[^\\t]*\\t",
+                "^[^\\t]+\\t[^\\t]+\\t[^\\t]*","[^\\t]*\$",
+                true, "(#)",
+                true,true,
+                true, "{@}",
+                true  // flag this is an empty object
+        )
+        testHead = Kamusi.nofileSetup( myKF, dummyKamusiString )
+        myProps.prodFlag = false  // take out of production mode
     }
 
     // isNotViable  -- returns true if system doesn't have viable kamusi data
@@ -79,7 +95,7 @@ object MyEnvironment {
                  (testHead?.isNotViable()   ?: true)
                )
         )
-    }
+     }
 
     // replacePlatform  --
         // each Android Activity lifecycle requires a refreshed AndroidPlatform

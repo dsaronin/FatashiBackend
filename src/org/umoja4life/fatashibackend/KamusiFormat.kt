@@ -6,7 +6,7 @@ import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.IOException
 
-private const val DUMMYSTUB = "sample-kamusi"
+private const val DEBUG = false
 
 data class KamusiFormat(
         val filename: String,
@@ -29,18 +29,18 @@ data class KamusiFormat(
 ) {
     // secondary constructor for instantiating empty object
         constructor() : this(
-            DUMMYSTUB, "kamusi", "kiswahili",
-                "(\\s+--\\s+)|(\\t__[ \\t\\x0B\\f]+)",
-            "^[^\\t]*","[^\\t]*\\t",
-                "^[^\\t]+\\t[^\\t]*","[^\\t]*\\t",
-                "^[^\\t]+\\t[^\\t]+\\t[^\\t]*","[^\\t]*\$",
-                true, "(#)",
-                true,true,
-                true, "{@}",
+            "", "", "",
+                "",
+            "","",
+                "","",
+                "","",
+            false, "",
+            false,false,
+                false, "",
                 true  // flag this is an empty object
         )
 
-companion object {
+    companion object {
 
     // kamusiFormatSetup -- recursive: works backwards on a list of KamusiFormat filenames
     // to open the file, read the JSON and return an object
@@ -60,18 +60,19 @@ companion object {
     // returns it as a KamusiFormat object
     // if exception encountered, returns an empty KamusiFormat object
     suspend fun readJsonKamusiFormats(f: String) : KamusiFormat {
-        val kamusiFormat : KamusiFormat
+        var kamusiFormat = KamusiFormat()
         val kamusiFormatType = object : TypeToken<KamusiFormat>() {}.type
 
-        MyEnvironment.printWarnIfDebug("Reading KamusiFormat file: $f")
+        if (DEBUG) MyEnvironment.printWarnIfDebug("Reading KamusiFormat file: $f")
 
         try {
-            kamusiFormat = Gson()
-                .fromJson( MyEnvironment.myPlatform.getFile(f), kamusiFormatType)
+            val text = MyEnvironment.myPlatform.getFile(f)
+            if( text.isNotBlank() ) {
+                kamusiFormat = Gson().fromJson(text, kamusiFormatType)
+            }
         }
         catch(ex: Exception){
             printError(ex.toString())
-            return KamusiFormat()
         }
 
         return kamusiFormat
