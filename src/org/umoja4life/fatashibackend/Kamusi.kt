@@ -118,6 +118,13 @@ companion object {
         return (dictionary.isEmpty() && (nextKamusi?.isNotViable() ?: true))
     }
 
+    // myStatus  -- builds up displayable inner status
+    // RECURSIVE
+    fun myStatus() : String {
+        return "${myKamusiFormat.filename} (${dictionary.isEmpty().toChar()})\n" +
+                (nextKamusi?.myStatus() ?: "")
+    }
+
     // printStatus -- output status of dictionary
     fun printStatus() {
         MyEnvironment.myPlatform.infoAlert(
@@ -125,7 +132,11 @@ companion object {
         )
     }
 
-    fun totalPages() = dictionary.count() / MyEnvironment.myProps.listLineCount
+        // totalPages  -- calculate total pages in kamusi; always at least 1 page
+    fun totalPages() : Int {
+        val pages = dictionary.count() / MyEnvironment.myProps.listLineCount
+        return if (pages <= 0) 1 else pages
+    }
 
     // listRandom -- output a random page of dictionary internal representation
     fun listRandom() {
@@ -139,7 +150,7 @@ companion object {
     private fun listPage( page: Int, index: Int) {
         // printInfo("Page $page from ${myKamusiFormat.filename}:")
             // sanity check on endIndex to make sure doesn't exceed number of lines
-        var endIndex = index+ MyEnvironment.myProps.listLineCount
+        var endIndex = index + MyEnvironment.myProps.listLineCount
         if (endIndex >= dictionary.count()) endIndex = dictionary.count() - 1
 
         // for (idx in (index until endIndex)) println( dictionary[idx] )

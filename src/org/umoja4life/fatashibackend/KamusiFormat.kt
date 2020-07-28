@@ -9,7 +9,7 @@ import java.io.IOException
 private const val DEBUG = false
 
 data class KamusiFormat(
-        val filename: String,
+        var filename: String,
         val kamusiType: String,
         val kamusiLang: String,
         val fieldDelimiters: String,
@@ -64,6 +64,7 @@ data class KamusiFormat(
         val kamusiFormatType = object : TypeToken<KamusiFormat>() {}.type
 
         if (DEBUG) MyEnvironment.printWarnIfDebug("Reading KamusiFormat file: $f")
+        kamusiFormat.filename = f  // remember json filename in case of failure
 
         try {
             val text = MyEnvironment.myPlatform.getFile(f)

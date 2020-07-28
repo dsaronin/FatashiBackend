@@ -89,6 +89,7 @@ object MyEnvironment {
     // isNotViable  -- returns true if system doesn't have viable kamusi data
     // a variety of factors could cause this: problems in reading files, etc
     fun isNotViable() : Boolean {
+        if (DEBUG) printWarn("***** MyEnv ***** config: ${myProps.isNotViable()}; kHead: ${(kamusiHead?.isNotViable() ?: true)}, tHead: ${(testHead?.isNotViable() ?: true)}")
         return (
                 myProps.isNotViable() ||
                ( (kamusiHead?.isNotViable() ?: true) &&
@@ -96,6 +97,14 @@ object MyEnvironment {
                )
         )
      }
+
+        // myStatus  -- returns a displayble string of inner status of all key parts
+    fun myStatus() : String {
+        return myProps.myStatus() +
+                (kamusiHead?.myStatus() ?: "") +
+                (testHead?.myStatus() ?: "") +
+                (methaliHead?.myStatus() ?: "")
+    }
 
     // replacePlatform  --
         // each Android Activity lifecycle requires a refreshed AndroidPlatform
@@ -167,14 +176,15 @@ object MyEnvironment {
 
     // printOptions -- display the current state of options
     fun printOptions() {
-        val optionList = "  verbose (%c), debug (%c), prod (%c) list n(%d)"
+        val optionList = "Options & Status:\nverbose (%c), debug (%c), prod (%c) list n(%d)\n%s"
 
         myPlatform.infoAlert(
                 optionList.format(
                         myProps.verboseFlag.toChar(),
                         myProps.debugFlag.toChar(),
                         myProps.prodFlag.toChar(),
-                        myProps.listLineCount
+                        myProps.listLineCount,
+                        myStatus()
                 )
         )
 

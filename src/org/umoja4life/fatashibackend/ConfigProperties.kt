@@ -20,11 +20,14 @@ class ConfigProperties(
         var testList: Stack<String> = mutableListOf<String>()   // ordered filenames for test dicts
 ) {
         var clampResults = LIST_LINE_COUNT + LIST_LINE_COUNT  // used to clamp max results for any single search
+        private var wasnotValid = true  // assume issue with config_properties
+        private var filename : String = ""
 
     init {
         // force sanity on some values
         setLineCount( listLineCount )
         if (appName.isBlank()) appName = APP_NAME
+        if (DEBUG)  printWarn(">>>> Config INIT <<<<<")
     }  // init block
 
         // clamps output results to 2x listline count to avoid 100s of lines of output
@@ -40,9 +43,11 @@ class ConfigProperties(
     }
 
         // isNotViable -- returns true if there are no Kamusi Format lists
-    fun isNotViable() : Boolean {
-        return (kamusiList.isEmpty() && testList.isEmpty())
-    }
+    fun isNotViable() : Boolean = wasnotValid
+
+    fun hasInvalidKFLists() : Boolean = (kamusiList.isEmpty() && testList.isEmpty())
+
+    fun myStatus() : String = "configurations $filename (${isNotViable().toChar()})\n"
 
     companion object {
 
@@ -55,13 +60,18 @@ class ConfigProperties(
             try {
                 val text = MyEnvironment.myPlatform.getFile(f)
                 if( text.isNotBlank() ) {
-                    myProperties = Gson().fromJson(text, myPropertiesType)
+                    with( Gson().fromJson(text, myPropertiesType) as ConfigProperties ) {
+                        wasnotValid = hasInvalidKFLists()  // validity depends on valid KF Lists
+                        filename = f
+                        myProperties = this
+                    }
                 }
             }
             catch (ex: Exception) {
-                printError(ex.toString())
+                if (DEBUG) printError(ex.toString())
             }
 
+            if (DEBUG) printWarn(">>>>> post ConfigProperties: $f, ${myProperties.filename}; ${myProperties.wasnotValid}; ${myProperties.isNotViable()}")
             return myProperties
         }
     }  // companion object
