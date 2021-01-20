@@ -1,0 +1,18 @@
+{
+  "filename": "data/swahili-etymology.txt",
+  "kamusiType": "kamusi",
+  "kamusiLang": "kiswahili",
+  "fieldDelimiters": "(\\s+--\\s+)|(\\t__[ \\t\\x0B\\f]+)",
+  "wrapKeyHead":  "^[^\\t]*",
+  "wrapKeyTail":  "[^\\t]*\\t",
+  "wrapDefHead":  "^[^\\t]+\\t[^\\t]*",
+  "wrapDefTail":  "[^\\t]*\\t",
+  "wrapUsgHead":  "^[^\\t]+\\t[^\\t]+\\t[^\\t]*",
+  "wrapUsgTail":  "[^\\t]*$",
+  "hashtagOn": true,
+  "hashtagWrapPattern": "(#)",
+  "percentOn": true,
+  "ampersandOn": true,
+  "atsignOn": true,
+  "atsignWrapPattern": "{@}"
+}

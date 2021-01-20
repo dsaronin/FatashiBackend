@@ -4,7 +4,7 @@
   "verboseFlag": false,
   "debugFlag": false,
   "prodFlag": false,
-  "kamusiList": ["data/dsa_dictionary.json", "data/tuki_kamusi.json", "data/tuki_english.json"],
+  "kamusiList": ["data/dsa_dictionary.json", "data/tuki_kamusi.json", "data/tuki_english.json", "data/swahili-etymology.json"],
   "methaliList": ["data/methali_kamusi.json"],
   "testList": ["data/tempdict.json"]
 }
