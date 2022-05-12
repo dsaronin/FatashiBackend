@@ -45,7 +45,8 @@ data class Kamusi ( val myKamusiFormat: KamusiFormat)  {
     private val keyModifiers = "#%&@"  // symbols to constrain searching
     private val escapeLiteral = "/"    // escapes a search term to force as-is
         // itemRegex below values kamusi search item requests  (see above comments)
-    private val itemRegex = "(^$escapeLiteral.+$escapeLiteral$|[-~;:]?[\\w'+]+[;:]?)(\\W|[$keyModifiers])?(\\w+)?"
+//    private val itemRegex = "(^$escapeLiteral.+$escapeLiteral$|[-~;:]?[\\w'+]+[;:]?)(\\W|[$keyModifiers])?(\\w+)?"
+    private val itemRegex = "(^$escapeLiteral.+$escapeLiteral$|[-~;:]?[\\p{L}\\p{N}\\p{Pc}'+]+[;:]?)(\\W|[$keyModifiers])?(\\w+)?"
 
     private val internalFields = "\t"    // our standard for field delimiters
     private val recordDelimiter = "\n"   // our standard for record delimiters
