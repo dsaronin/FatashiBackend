@@ -46,9 +46,11 @@ data class Kamusi ( val myKamusiFormat: KamusiFormat)  {
     private val escapeLiteral = "/"    // escapes a search term to force as-is
         // itemRegex below values kamusi search item requests  (see above comments)
 //    private val itemRegex = "(^$escapeLiteral.+$escapeLiteral$|[-~;:]?[\\w'+]+[;:]?)(\\W|[$keyModifiers])?(\\w+)?"
+    // v0.0.78
     private val itemRegex = "(^$escapeLiteral.+$escapeLiteral$|[-~;:]?[\\p{L}\\p{N}\\p{Pc}'+]+[;:]?)(\\W|[$keyModifiers])?(\\w+)?"
 
     private val internalFields = "\t"    // our standard for field delimiters
+    private val wordBoundary = "[^\\p{L}\\p{N}\\{Pc}]"
     private val recordDelimiter = "\n"   // our standard for record delimiters
     private val showKeyDelim = "\t-- "   // our output standard to delimit fields
     private val spaceReplace = "_"       // underscores in keys are replaced by space
@@ -156,9 +158,11 @@ companion object {
 
         // for (idx in (index until endIndex)) println( dictionary[idx] )
         // use printResults to highlight the entry item
+        // old: """^([-~]?\w+[',’`]? ?)+""".toRegex(RegexOption.IGNORE_CASE),
+        // v0.0.78
         printResults(
                 dictionary.slice((index until endIndex)),
-                """^([-~]?\w+[',’`]? ?)+""".toRegex(RegexOption.IGNORE_CASE),
+                """^([-~]?[\p{L}\p{N}\p{Pc}]+[',’`]? ?)+""".toRegex(RegexOption.IGNORE_CASE),
                 ">>>>> Page $page\tfrom ${myKamusiFormat.filename}:\t"
         )
     }
@@ -330,7 +334,11 @@ companion object {
     // prepKey -- massages key to add/remove based on special symbols
     // NOTE: by this point, mid-term ';' and ':' have been parsed out,
     //       so if present, they will only be leading and trailing
-    // ?? \b might be an issue with Turkish!
+    // ?? \b is an issue with Turkish! use: [^\\p{L}\\p{N}\\{Pc}] or [[:<:]]|[[:>:]] <-- won't work
+    // issue is start/end of line aren't matching
+    // consider future: (^|(?<=\W))hello($|(?=\W)) or (?<!\w)hello(?!\w) with \w replacements
+    // v0.0.78 failed: .replace(";".toRegex(), """[^\\p{L}\\p{N}\\{Pc}]""")  // non-word boundaries
+
     private fun prepKey(s: String): String {
         return Swahili.preProcessKey(s)
                 .replace(";".toRegex(), """\\b""")  // non-word boundaries
