@@ -330,6 +330,7 @@ companion object {
     // prepKey -- massages key to add/remove based on special symbols
     // NOTE: by this point, mid-term ';' and ':' have been parsed out,
     //       so if present, they will only be leading and trailing
+    // ?? \b might be an issue with Turkish!
     private fun prepKey(s: String): String {
         return Swahili.preProcessKey(s)
                 .replace(";".toRegex(), """\\b""")  // non-word boundaries
