@@ -99,8 +99,8 @@ companion object {
         return myKamusi   // return myself
     }
 
-        // nofileSetup -- simply sets up a kamusi with builtin sample data
-    fun nofileSetup( myFormat: KamusiFormat, myKamusiText : String ): Kamusi {
+        // nofilesetup -- simply sets up a kamusi with builtin sample data
+    fun nofilesetup( myFormat: KamusiFormat, myKamusiText : String ): Kamusi {
         val myKamusi = Kamusi(myFormat)
         with (myKamusi) {
             dictionary = fieldDelimiter.replace(myKamusiText, internalFields)

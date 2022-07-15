@@ -17,7 +17,8 @@ fun printError(s: String)  = MyEnvironment.myPlatform.lineoutError(AnsiColor.wra
 
 object FatashiWork  {
 
-    private val helpList = "  tafuta, methali, list, browse, sts, options, help, quit, exit"
+    private val helpList = "  tafuta (t), methali (m), list (l), browse (b), status (s), " +
+            "options (o), langctl (&), help, quit, exit"
 
     // setupWork -- get things started, say hello to user
     fun setupWork() {
@@ -30,9 +31,10 @@ object FatashiWork  {
     }
 
     // fatashi work loop: prompt, get input, parse commands
+    // OLD: printPrompt("${MyEnvironment.myProps.appName} > ")  // command prompt
     fun work() {
         do {
-            printPrompt("${MyEnvironment.myProps.appName} > ")  // command prompt
+            printPrompt("${MyEnvironment.myLanguage.prompt()} > ")  // command prompt
         } while ( parseCommands(MyEnvironment.myPlatform.getCommandLine()) )
     } // fun work
 
@@ -76,6 +78,11 @@ object FatashiWork  {
             "v", "version"   -> Version.printMyVersion(MyEnvironment.myPlatform.getFrontVersion())
             "o", "options"   -> MyEnvironment.printOptions()
 
+            // "&", "langctl" -> if rest of string empty: toggle language
+            // "&", "langctl" -> if <xx>: change language to xx
+            // "&", "langctl" -> if use getAlternate for the key
+
+
             ""               -> loop = true   // empty line; NOP
             else        -> {  // treat it as tafuta lookup request
                 useKamusi = selectKamusi(1)
@@ -95,8 +102,8 @@ object FatashiWork  {
         var level = n
         var kamusi =
             if (MyEnvironment.myProps.prodFlag  &&
-                MyEnvironment.kamusiHead != null
-            ) MyEnvironment.kamusiHead else MyEnvironment.testHead
+                MyEnvironment.myLanguage.getDefaultLanguage().kamusiHead != null
+            ) MyEnvironment.myLanguage.getDefaultLanguage().kamusiHead else MyEnvironment.myLanguage.getDefaultLanguage().testHead
 
         // loop thru looking at deeper levels as long as available
         while (level > 1 && kamusi?.nextKamusi != null ) {
@@ -109,7 +116,7 @@ object FatashiWork  {
     // selectMethali  -- jump to a specific methali chain level
     private fun selectMethali( n: Int ) : Kamusi? {
         var level = n
-        var kamusi = MyEnvironment.methaliHead
+        var kamusi = MyEnvironment.myLanguage.getDefaultLanguage().methaliHead
 
         // loop thru looking at deeper levels as long as available
         while (level > 1 && kamusi?.nextKamusi != null ) {

@@ -2,14 +2,13 @@ package org.umoja4life.fatashibackend
 
 import java.io.File
 
-private const val DUMMYSTUB = "sample-kamusi"
 private const val DEBUG = false
 
 fun Boolean.toChar() = this.toString().first()
 
 // **************************************************************************
 // **************************************************************************
-const val CONFIG_PROPERTIES_FILE ="config_properties.json"
+const val FATASHI_PROPERTIES_FILE ="fatashi_properties.json"
 
 // **************************************************************************
 // default parameters; not to be used outside of MyEnvironment
@@ -23,18 +22,13 @@ object MyEnvironment {
     // ******** MyEnvironment public properties  ********************************
     // **************************************************************************
 
-    // myProps is read in from config_properties.json when singleton first accessed
-    lateinit var myProps : ConfigProperties
+    // myProps is read in from fatashi_properties.json when singleton first accessed
+    lateinit var myProps : FatashiProperties
     lateinit var myPlatform : PlatformIO
+    lateinit var myLanguage : LanguageControl
+
     val anchorHead       = ANCHOR_HEAD
     val anchorTail       = ANCHOR_TAIL
-    var kamusiHead:  Kamusi? = null
-    var methaliHead: Kamusi? = null
-    var testHead:    Kamusi? = null
-
-    private var kamusiFormatList: Stack<KamusiFormat> = mutableListOf<KamusiFormat>()
-    private var methaliFormatList: Stack<KamusiFormat> = mutableListOf<KamusiFormat>()
-    private var testFormatList: Stack<KamusiFormat> = mutableListOf<KamusiFormat>()
 
     // **************************************************************************
     // **************************************************************************
@@ -43,10 +37,12 @@ object MyEnvironment {
     // args -- are the cli argument list when invoked
     // platformIO -- the platform implementation for I/O: Linux or Android
     // NOTE: expected to be called within CoroutineScope
-    suspend fun setup(args: Array<String>, platformIO: PlatformIO): Unit {
+    suspend fun setup(args: Array<String>, platformIO: PlatformIO) {
         myPlatform = platformIO  // MUST ALWAYS BE DONE FIRST!!!
             // vvvvvv  MUST ALWAYS BE DONE SECOND!!!  vvvvvvv
-        myProps = ConfigProperties.readJsonConfigurations(CONFIG_PROPERTIES_FILE)
+        myProps = FatashiProperties.fatashiDataSetup(FATASHI_PROPERTIES_FILE)
+            // vvvvvv ALWAYS DONE THIRD -- inputs language trees/dictionaries
+        myLanguage = LanguageControl.setupLanguages( myProps.langList, dummyKamusiString )
 
         parseArgList(args)
 
@@ -54,56 +50,38 @@ object MyEnvironment {
             printArgList(args)
             printOptions()
         }
-
-        // get the various KamusiFormat files for each kamusi
-        KamusiFormat.kamusiFormatSetup(myProps.kamusiList, kamusiFormatList)
-        KamusiFormat.kamusiFormatSetup(myProps.methaliList, methaliFormatList)
-        KamusiFormat.kamusiFormatSetup(myProps.testList, testFormatList)
-
-        // process the KamusiFormat files to create kamusi objects
-        kamusiHead = Kamusi.kamusiSetup(kamusiFormatList)
-        methaliHead = Kamusi.kamusiSetup(methaliFormatList)
-        testHead = Kamusi.kamusiSetup(testFormatList)
     }
 
-    fun nofileSetup(args: Array<String>, platformIO: PlatformIO) : Unit {
+    // nofileSetup -- invoked when not possible to access files
+    // fatashi will still function on its limited builtin language tree/test dictionary
+    fun nofileSetup(args: Array<String>, platformIO: PlatformIO) {
         if (DEBUG)  printWarnIfDebug("MyEnv: nofileSetup started")
         myPlatform = platformIO // MUST ALWAYS BE DONE FIRST!!!
-        myProps = ConfigProperties()  // using default values
+        myProps = FatashiProperties()  // using default values
+        myLanguage = LanguageControl.nofilesetup( dummyKamusiString ) // using default values
         parseArgList(args)          // parse an args list
-        val myKF = KamusiFormat(
-                DUMMYSTUB, "kamusi", "kiswahili",
-                "(\\s+--\\s+)|(\\t__[ \\t\\x0B\\f]+)",
-                "^[^\\t]*","[^\\t]*\\t",
-                "^[^\\t]+\\t[^\\t]*","[^\\t]*\\t",
-                "^[^\\t]+\\t[^\\t]+\\t[^\\t]*","[^\\t]*\$",
-                true, "(#)",
-                true,true,
-                true, "{@}",
-                true  // flag this is an empty object
-        )
-        testHead = Kamusi.nofileSetup( myKF, dummyKamusiString )
         myProps.prodFlag = false  // take out of production mode
     }
 
     // isNotViable  -- returns true if system doesn't have viable kamusi data
     // a variety of factors could cause this: problems in reading files, etc
     fun isNotViable() : Boolean {
-        if (DEBUG) printWarn("***** MyEnv ***** config: ${myProps.isNotViable()}; kHead: ${(kamusiHead?.isNotViable() ?: true)}, tHead: ${(testHead?.isNotViable() ?: true)}")
+        if (DEBUG) printWarn(
+                "***** MyEnv ***** config: ${myProps.isNotViable()}; " +
+                    "kHead: ${(myLanguage.getDefaultLanguage().kamusiHead?.isNotViable() ?: true)}, " +
+                    "tHead: ${(myLanguage.getDefaultLanguage().testHead?.isNotViable() ?: true)}"
+        )
         return (
                 myProps.isNotViable() ||
-               ( (kamusiHead?.isNotViable() ?: true) &&
-                 (testHead?.isNotViable()   ?: true)
+               ( (myLanguage.getDefaultLanguage().kamusiHead?.isNotViable() ?: true) &&
+                 (myLanguage.getDefaultLanguage().testHead?.isNotViable()   ?: true)
                )
         )
      }
 
         // myStatus  -- returns a displayble string of inner status of all key parts
     fun myStatus() : String {
-        return myProps.myStatus() +
-                (kamusiHead?.myStatus() ?: "") +
-                (testHead?.myStatus() ?: "") +
-                (methaliHead?.myStatus() ?: "")
+        return myProps.myStatus() + myLanguage.myStatus()
     }
 
     // replacePlatform  --
@@ -118,7 +96,7 @@ object MyEnvironment {
 
     // parseArgList -- parse the command line argument option flags
     // ex: -v -n 5 -d --version --kamusi1 "dsa_dictionary.txt"
-    fun parseArgList(args: Array<String>) {
+    private fun parseArgList(args: Array<String>) {
         if( args.isEmpty() ) return
 
         val lifo = stackOf<String>()
@@ -147,9 +125,6 @@ object MyEnvironment {
                     "p", "prod"     -> myProps.prodFlag = true
                     "h", "help"     -> printHelp()
                     "version"       -> Version.printMyVersion(" ")
-//                   "kamusi1"  -> kamusiMainFile = popFileNameOrDefault(lifo, productionFile )
-//                   "kamusi2"  -> kamusiStdFile = popFileNameOrDefault(lifo,KAMUSI_STANDARD_FILE)
-//                   "methali1" -> methaliStdFile = popFileNameOrDefault(lifo,METHALI_STANDARD_FILE)
 
                     else -> printArgUsageError("unknown flag: $flag")
                 }
@@ -169,7 +144,7 @@ object MyEnvironment {
 
     // printArgList -- outputs the command line argument option flags
     private fun printArgList(args: Array<String>) {
-        var list = mutableListOf( if( args.isEmpty() ) "No args passed." else "My calling args are...")
+        val list = mutableListOf( if( args.isEmpty() ) "No args passed." else "My calling args are...")
         for (i in args.indices ) list.add("args[$i] is: ${args[i]}")
         myPlatform.infoAlert(list)
     }

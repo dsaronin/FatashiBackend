@@ -1,0 +1,8 @@
+{
+  "appName": "fatashi",
+  "listLineCount": 25,
+  "verboseFlag": false,
+  "debugFlag": false,
+  "prodFlag": false,
+  "langList": ["data/swahili_properties.json", "data/turkish_properties.json" ]
+}

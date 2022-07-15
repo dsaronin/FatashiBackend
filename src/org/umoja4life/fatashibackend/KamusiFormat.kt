@@ -7,6 +7,7 @@ import java.io.File
 import java.io.IOException
 
 private const val DEBUG = false
+        const val DUMMYSTUB = "sample-kamusi"
 
 data class KamusiFormat(
         var filename: String,
@@ -42,42 +43,61 @@ data class KamusiFormat(
 
     companion object {
 
-    // kamusiFormatSetup -- recursive: works backwards on a list of KamusiFormat filenames
-    // to open the file, read the JSON and return an object
-    // constructs a FIFO of the results
-    suspend fun kamusiFormatSetup(fnList: Stack<String>, fkList: Stack<KamusiFormat>) {
-        val fn = fnList.pop() ?: return  // pop an element; unless end of list, return -->>>>
+        // kamusiFormatSetup -- recursive: works backwards on a list of KamusiFormat filenames
+        // to open the file, read the JSON and return an object
+        // constructs a FIFO of the results
+        suspend fun kamusiFormatSetup(fnList: Stack<String>, fkList: Stack<KamusiFormat>) {
+            val fn = fnList.pop() ?: return  // pop an element; unless end of list, return -->>>>
 
-        if( fn.isNotEmpty() )  {  // only handle nonEmpty filenames
-                // push to result list our KamusiFormat
-            fkList.push(readJsonKamusiFormats(fn))
-        }
-        kamusiFormatSetup(fnList, fkList)  // recurse if more in list
-        // fall thru to return  <<<<<<<<<<<<---
-    }
-
-    // readJsonKamusiFormats -- opens a single KamusiFormat JSON and
-    // returns it as a KamusiFormat object
-    // if exception encountered, returns an empty KamusiFormat object
-    suspend fun readJsonKamusiFormats(f: String) : KamusiFormat {
-        var kamusiFormat = KamusiFormat()
-        val kamusiFormatType = object : TypeToken<KamusiFormat>() {}.type
-
-        if (DEBUG) MyEnvironment.printWarnIfDebug("Reading KamusiFormat file: $f")
-        kamusiFormat.filename = f  // remember json filename in case of failure
-
-        try {
-            val text = MyEnvironment.myPlatform.getFile(f)
-            if( text.isNotBlank() ) {
-                kamusiFormat = Gson().fromJson(text, kamusiFormatType)
+            if( fn.isNotEmpty() )  {  // only handle nonEmpty filenames
+                    // push to result list our KamusiFormat
+                fkList.push(readJsonKamusiFormats(fn))
             }
-        }
-        catch(ex: Exception){
-            printError(ex.toString())
+            kamusiFormatSetup(fnList, fkList)  // recurse if more in list
+            // fall thru to return  <<<<<<<<<<<<---
         }
 
-        return kamusiFormat
-    }
-}
+        // readJsonKamusiFormats -- opens a single KamusiFormat JSON and
+        // returns it as a KamusiFormat object
+        // if exception encountered, returns an empty KamusiFormat object
+        suspend fun readJsonKamusiFormats(f: String) : KamusiFormat {
+            var kamusiFormat = KamusiFormat()
+            val kamusiFormatType = object : TypeToken<KamusiFormat>() {}.type
 
-}  // class
+            if (DEBUG) MyEnvironment.printWarnIfDebug("Reading KamusiFormat file: $f")
+            kamusiFormat.filename = f  // remember json filename in case of failure
+
+            try {
+                val text = MyEnvironment.myPlatform.getFile(f)
+                if( text.isNotBlank() ) {
+                    kamusiFormat = Gson().fromJson(text, kamusiFormatType)
+                }
+            }
+            catch(ex: Exception){
+                printError(ex.toString())
+            }
+
+            return kamusiFormat
+        }
+
+        // nofilesetup  -- preps the internal dummyDictionary
+        // returns kamusi object for it
+        fun nofilesetup( dummyDict : String ) : Kamusi {
+            val myKF = KamusiFormat(
+                    DUMMYSTUB, "kamusi", "kiswahili",
+                    "(\\s+--\\s+)|(\\t__[ \\t\\x0B\\f]+)",
+                    "^[^\\t]*","[^\\t]*\\t",
+                    "^[^\\t]+\\t[^\\t]*","[^\\t]*\\t",
+                    "^[^\\t]+\\t[^\\t]+\\t[^\\t]*","[^\\t]*\$",
+                    true, "(#)",
+                    true,true,
+                    true, "{@}",
+                    true  // flag this is an empty object
+            )
+            return Kamusi.nofilesetup( myKF, dummyDict )
+        }
+
+    }  // companion object
+
+
+}  // class KamusiFormat

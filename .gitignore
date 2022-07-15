@@ -28,6 +28,7 @@ hs_err_pid*
 
 # data
 dsa_dictionary.txt
+turkce_dictionary.txt
 methali_kamusi.txt
 tuki_kamusi.txt
 tuki_english.txt
@@ -63,6 +64,7 @@ local.properties
 obj/
 
 # IntelliJ
+.idea/inspectionProfiles/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/dataSources.xml
