@@ -28,7 +28,7 @@ private const val DEBUG = false
  *     keyModifiers come after the item and act to constrain the search
  *          #abc  -- constrains matches only to records with (abc) qualifier in field 2: (tech)
  *          %n    -- constrains the search to only field n of each record
- *          &     -- invoke swahili smart processing (see elsewhere)
+ *          &     -- invoke language module smart-relaxing processing (see elsewhere)
  *          @     -- future
  **********************************************************************/
 
@@ -39,6 +39,7 @@ data class Kamusi ( val myKamusiFormat: KamusiFormat)  {
 
     var nextKamusi: Kamusi? = null  // next in chain of kamusi's
     var lastBrowseIndex: Int = 0    // remember our last browse index
+    private lateinit var myLang: LangData  // language module controlling kamusi
     private lateinit var dictionary: List<String>    // kamusi data
 
     var fieldDelimiter: Regex   // used to massage field delimiters to a standard
@@ -87,21 +88,27 @@ data class Kamusi ( val myKamusiFormat: KamusiFormat)  {
 companion object {
 
     // kamusiSetup -- recursively set up a list of kamusi's
+    // arg: the object to the overriding language for all kamusi's in the tree
     // return null if no more in list; else return the kamusi set up
-    suspend fun kamusiSetup( kfList: Stack<KamusiFormat>): Kamusi? {
+    suspend fun kamusiSetup( kfList: Stack<KamusiFormat>, myLang : LangData ): Kamusi? {
         
         val myFormat = kfList.pop() ?: return null  // end recursion at list end
         val myKamusi = Kamusi(myFormat).initialize()  // load and setup this kamusi
 
+        myKamusi.myLang = myLang  // remember which lang tree we belong to
+
             // setup remainder of list returning my child kamusi
-        myKamusi.nextKamusi = kamusiSetup(kfList)  // remember child
+        myKamusi.nextKamusi = kamusiSetup(kfList, myLang)  // remember child
 
         return myKamusi   // return myself
     }
 
         // nofilesetup -- simply sets up a kamusi with builtin sample data
-    fun nofilesetup( myFormat: KamusiFormat, myKamusiText : String ): Kamusi {
+    fun nofilesetup( myFormat: KamusiFormat, myKamusiText : String, myLang : LangData ): Kamusi {
         val myKamusi = Kamusi(myFormat)
+
+        myKamusi.myLang = myLang  // setup backlink to LangData control
+
         with (myKamusi) {
             dictionary = fieldDelimiter.replace(myKamusiText, internalFields)
                             .split(recordDelimiter)
@@ -240,7 +247,7 @@ companion object {
                         }
                 "%"  -> prepByField(keyitem, keyfrag.groupValues[3])  // returns updated keyitem
                 "&"  -> {
-                    keyitem = Swahili.postProcessKey(keyitem) // we want this to be the value highlighted!
+                    keyitem = myLang.langProc.postProcessKey(keyitem) // we want this to be the value highlighted!
                     keyitem
                 }   // returns updated keyitem
                 "@"  -> keyitem   // NOP for now; future expansion
@@ -340,7 +347,8 @@ companion object {
     // v0.0.78 failed: .replace(";".toRegex(), """[^\\p{L}\\p{N}\\{Pc}]""")  // non-word boundaries
 
     private fun prepKey(s: String): String {
-        return Swahili.preProcessKey(s)
+
+        return myLang.langProc.preProcessKey(s)
                 .replace(";".toRegex(), """\\b""")  // non-word boundaries
                 .replace(spaceReplace.toRegex(), " ")     // underscore ==> space
                 .trim()         // lead/trailing spaces

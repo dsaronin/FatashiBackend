@@ -82,7 +82,7 @@ data class KamusiFormat(
 
         // nofilesetup  -- preps the internal dummyDictionary
         // returns kamusi object for it
-        fun nofilesetup( dummyDict : String ) : Kamusi {
+        fun nofilesetup( dummyDict : String, myLang : LangData ) : Kamusi {
             val myKF = KamusiFormat(
                     DUMMYSTUB, "kamusi", "kiswahili",
                     "(\\s+--\\s+)|(\\t__[ \\t\\x0B\\f]+)",
@@ -94,7 +94,7 @@ data class KamusiFormat(
                     true, "{@}",
                     true  // flag this is an empty object
             )
-            return Kamusi.nofilesetup( myKF, dummyDict )
+            return Kamusi.nofilesetup( myKF, dummyDict, myLang )
         }
 
     }  // companion object

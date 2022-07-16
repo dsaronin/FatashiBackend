@@ -24,7 +24,7 @@ class LangData(
         var methaliList: Stack<String> = mutableListOf<String>(),  // ordered filenames for methali dicts
         var testList: Stack<String> = mutableListOf<String>()   // ordered filenames for test dicts
 )  {
-    // TODO : kamusi/methali/testHeads become part of a langData object
+    var langProc : LangProcessing = Neutral  // default is nop pre/post processing
     var kamusiHead:  Kamusi? = null
     var methaliHead: Kamusi? = null
     var testHead:    Kamusi? = null
@@ -71,6 +71,16 @@ class LangData(
         if( langName.isBlank() ) langName = ERR_LANG_NAME
     }
 
+    // setLangProc -- determines and sets the language processing module
+    // if none matching found, allows default Neutral (nop) module to remain in place
+    fun setLangProc() {
+        when (langCode) {
+            "sw" -> langProc = Swahili
+            "tr" -> langProc = Turkish
+            else -> langProc = Neutral
+        }
+    }
+
     // ========================================================================
     companion object {
 
@@ -101,6 +111,9 @@ class LangData(
         suspend fun langDataSetup(f: String, v: Boolean = false): LangData {
             val myProps  : LangData = readJsonConfigurations(f)
 
+            myProps.validateCodes()  // check & change lang/flag CODES to be valid
+            myProps.setLangProc()    // setup the pre/post processor for search items
+
             val kamusiFormatList: Stack<KamusiFormat> = mutableListOf<KamusiFormat>()
             val methaliFormatList: Stack<KamusiFormat> = mutableListOf<KamusiFormat>()
             val testFormatList: Stack<KamusiFormat> = mutableListOf<KamusiFormat>()
@@ -111,18 +124,16 @@ class LangData(
             KamusiFormat.kamusiFormatSetup(myProps.testList, testFormatList)
 
             // process the KamusiFormat files to create kamusi objects
-            myProps.kamusiHead = Kamusi.kamusiSetup(kamusiFormatList)
-            myProps.methaliHead = Kamusi.kamusiSetup(methaliFormatList)
-            myProps.testHead = Kamusi.kamusiSetup(testFormatList)
-
-            myProps.validateCodes()  // check & change lang/flag CODES to be valid
+            myProps.kamusiHead = Kamusi.kamusiSetup(kamusiFormatList, myProps)
+            myProps.methaliHead = Kamusi.kamusiSetup(methaliFormatList, myProps)
+            myProps.testHead = Kamusi.kamusiSetup(testFormatList, myProps)
 
             return myProps
         } // languageSetup
 
         fun nofilesetup( dummyDict : String ) : LangData {
             val myProps  = LangData()
-            myProps.testHead = KamusiFormat.nofilesetup( dummyDict )
+            myProps.testHead = KamusiFormat.nofilesetup( dummyDict, myProps )
             return myProps
         }
 
