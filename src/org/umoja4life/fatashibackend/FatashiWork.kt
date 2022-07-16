@@ -78,10 +78,20 @@ object FatashiWork  {
             "v", "version"   -> Version.printMyVersion(MyEnvironment.myPlatform.getFrontVersion())
             "o", "options"   -> MyEnvironment.printOptions()
 
-            // "&", "langctl" -> if rest of string empty: toggle language
-            // "&", "langctl" -> if <xx>: change language to xx
-            // "&", "langctl" -> if use getAlternate for the key
+            "&", "langctl" -> {
+                MyEnvironment.myLanguage.toggleLanguage()
+                useKamusi = selectKamusi(1)   // search for any other key items in list
+            }
 
+            "&&", "langctl" -> {
+                if (cmdlist.size > 1) {  // process 2d element as a language code
+                    MyEnvironment.myLanguage.setDefaultByKey( cmdlist[1].trim() )
+                }
+                else {  // langcode arg missing; just toggle the languages
+                    MyEnvironment.myLanguage.toggleLanguage()
+                }
+
+            }
 
             ""               -> loop = true   // empty line; NOP
             else        -> {  // treat it as tafuta lookup request
