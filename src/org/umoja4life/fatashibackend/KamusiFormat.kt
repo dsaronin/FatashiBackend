@@ -12,7 +12,7 @@ private const val DEBUG = false
 data class KamusiFormat(
         var filename: String,
         val kamusiType: String,
-        val kamusiLang: String,
+        val kamusiLang: String,  // currently not used, referenced
         val fieldDelimiters: String,
         val wrapKeyHead: String,
         val wrapKeyTail: String,

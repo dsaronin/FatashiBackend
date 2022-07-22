@@ -30,11 +30,17 @@ object FatashiWork  {
         printInfo("...ending ${MyEnvironment.myProps.appName}")
     }
 
+    // getPrompt  -- returns current prompt showing language
+    //
+    fun getPrompt() : String {
+         return MyEnvironment.getPrompt()
+    }
+
     // fatashi work loop: prompt, get input, parse commands
     // OLD: printPrompt("${MyEnvironment.myProps.appName} > ")  // command prompt
     fun work() {
         do {
-            printPrompt("${MyEnvironment.myLanguage.prompt()} > ")  // command prompt
+            printPrompt("${getPrompt()} > ")  // command prompt
         } while ( parseCommands(MyEnvironment.myPlatform.getCommandLine()) )
     } // fun work
 
@@ -83,7 +89,7 @@ object FatashiWork  {
                 useKamusi = selectKamusi(1)   // search for any other key items in list
             }
 
-            "&&", "langctl" -> {
+            "&&"           -> {
                 if (cmdlist.size > 1) {  // process 2d element as a language code
                     MyEnvironment.myLanguage.setDefaultByKey( cmdlist[1].trim() )
                 }

@@ -33,6 +33,15 @@ object MyEnvironment {
     // **************************************************************************
     // **************************************************************************
 
+    // isLanguageReady -- returns true if the lateinit myLanguage has been initialized
+    private fun isLanguageReady() : Boolean {
+        return this::myLanguage.isInitialized
+    }
+
+    fun getPrompt() : String {
+        return if( isLanguageReady() ) myLanguage.prompt() else APP_NAME
+    }
+
     // setup -- initializes the environment
     // args -- are the cli argument list when invoked
     // platformIO -- the platform implementation for I/O: Linux or Android
