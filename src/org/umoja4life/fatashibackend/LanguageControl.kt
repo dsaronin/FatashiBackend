@@ -137,8 +137,10 @@ class LanguageControl {
         //   returns the LanguageControl object
         private fun nofilework( mySelf: LanguageControl, dummyDict: String ) : LanguageControl {
             val dummyLD = LangData.nofilesetup(dummyDict) // set up the dummy dictionary
-                // push to map
-            mySelf.myLangs[ mySelf.defaultCode ] = mySelf.setnewCodes(dummyLD)
+
+            mySelf.setnewCodes(dummyLD)   // 1st setup the newcodes;
+            // must happen before the lvalue key evaluation pickup below
+            mySelf.myLangs[ mySelf.defaultCode ] = dummyLD   // add to myLangs map[langCode,lang]
 
             return mySelf
         }

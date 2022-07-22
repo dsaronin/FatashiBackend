@@ -18,9 +18,12 @@ enum class Version(val vsn: Int)  {
             return if( _VERSION_COMMENT.isBlank() ) "" else "[$_VERSION_COMMENT]"
         }
 
+        // getMyVersion -- returns formatted appname + version info
+        fun getMyVersion() = "${MyEnvironment.myProps.appName} ${toVersion()} "
+
         // printMyVersion  -- and anything else supplied
         fun printMyVersion(strsuffix: String) {
-            MyEnvironment.myPlatform.infoAlert("${MyEnvironment.myProps.appName} ${toVersion()} " + strsuffix)
+            MyEnvironment.myPlatform.infoAlert("${getMyVersion()} " + strsuffix)
         }
     }
 }

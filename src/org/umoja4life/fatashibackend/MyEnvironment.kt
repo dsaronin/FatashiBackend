@@ -90,7 +90,7 @@ object MyEnvironment {
 
         // myStatus  -- returns a displayble string of inner status of all key parts
     fun myStatus() : String {
-        return myProps.myStatus() + myLanguage.myStatus()
+        return myProps.myStatus() + "\n" + myLanguage.myStatus()
     }
 
     // replacePlatform  --
@@ -163,6 +163,7 @@ object MyEnvironment {
         val optionList = "Options & Status:\nverbose (%c), debug (%c), prod (%c) list n(%d)\n%s"
 
         myPlatform.infoAlert(
+                "${Version.getMyVersion()}\n" +
                 optionList.format(
                         myProps.verboseFlag.toChar(),
                         myProps.debugFlag.toChar(),
