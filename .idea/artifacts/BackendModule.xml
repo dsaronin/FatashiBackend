@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/BackendModule</output-path>
     <root id="archive" name="BackendModule.jar">
       <element id="module-output" name="FatashiBackend" />
-      <element id="library" level="project" name="com.google.code.gson:gson:2.8.6" />
     </root>
   </artifact>
 </component>
