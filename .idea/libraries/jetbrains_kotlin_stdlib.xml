@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="jetbrains.kotlin.stdlib" type="repository">
+    <properties maven-id="org.jetbrains.kotlin:kotlin-stdlib:1.9.21" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/kotlin-stdlib-1.9.21.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/annotations-13.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
