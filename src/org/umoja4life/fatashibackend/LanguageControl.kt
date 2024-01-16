@@ -137,6 +137,7 @@ class LanguageControl {
         //   returns the LanguageControl object
         private fun nofilework( mySelf: LanguageControl, dummyDict: String ) : LanguageControl {
             val dummyLD = LangData.nofilesetup(dummyDict) // set up the dummy dictionary
+            if( DEBUG ) printWarn("LANG NOFILE: empty: ${mySelf.meEmpty}, defC: ${mySelf.defaultCode} " )
 
             mySelf.setnewCodes(dummyLD)   // 1st setup the newcodes;
             // must happen before the lvalue key evaluation pickup below

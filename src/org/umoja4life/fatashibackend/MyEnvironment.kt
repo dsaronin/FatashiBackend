@@ -49,7 +49,7 @@ object MyEnvironment {
     suspend fun setup(args: Array<String>, platformIO: PlatformIO) {
         myPlatform = platformIO  // MUST ALWAYS BE DONE FIRST!!!
             // vvvvvv  MUST ALWAYS BE DONE SECOND!!!  vvvvvvv
-        myProps = FatashiProperties.fatashiDataSetup(FATASHI_PROPERTIES_FILE)
+        myProps = FatashiProperties.fatashiDataSetup(FATASHI_PROPERTIES_FILE,DEBUG)
             // vvvvvv ALWAYS DONE THIRD -- inputs language trees/dictionaries
         myLanguage = LanguageControl.setupLanguages( myProps.langList, dummyKamusiString )
 
@@ -76,9 +76,9 @@ object MyEnvironment {
     // a variety of factors could cause this: problems in reading files, etc
     fun isNotViable() : Boolean {
         if (DEBUG) printWarn(
-                "***** MyEnv ***** config: ${myProps.isNotViable()}; " +
-                    "kHead: ${(myLanguage.getDefaultLanguage().kamusiHead?.isNotViable() ?: true)}, " +
-                    "tHead: ${(myLanguage.getDefaultLanguage().testHead?.isNotViable() ?: true)}"
+                "***** MyEnv ***** not-viable?: ${myProps.isNotViable()}; " +
+                    "kHead-err: ${(myLanguage.getDefaultLanguage().kamusiHead?.isNotViable() ?: true)}, " +
+                    "tHead-err: ${(myLanguage.getDefaultLanguage().testHead?.isNotViable() ?: true)}"
         )
         return (
                 myProps.isNotViable() ||
@@ -160,7 +160,7 @@ object MyEnvironment {
 
     // printOptions -- display the current state of options
     fun printOptions() {
-        val optionList = "Options & Status:\nverbose (%c), debug (%c), prod (%c) list n(%d)\n%s"
+        val optionList = "Options & Status:\nverbose (%c), debug (%c), prod (%c) lc (%d)\n%s"
 
         myPlatform.infoAlert(
                 "${Version.getMyVersion()}\n" +

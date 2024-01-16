@@ -1,6 +1,6 @@
 package org.umoja4life.fatashibackend
 
-private const val DEBUG = false
+private const val DEBUG = true
 
 // copyright
 

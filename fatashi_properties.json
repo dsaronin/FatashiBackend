@@ -4,5 +4,5 @@
   "verboseFlag": false,
   "debugFlag": false,
   "prodFlag": false,
-  "langList": ["data/swahili_properties.json", "data/turkish_properties.json" ]
+  "langList": ["data/turkish_properties.json", "data/swahili_properties.json"]
 }

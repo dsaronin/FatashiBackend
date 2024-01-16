@@ -6,7 +6,7 @@ import java.io.File
 import java.io.IOException
 import java.util.logging.Logger
 
-private const val DEBUG = false
+private const val DEBUG = true
 
 class LinuxPlatform : PlatformIO {
 
@@ -64,7 +64,7 @@ class LinuxPlatform : PlatformIO {
     }
 
     override fun getFrontVersion(): String {
-        return "(c) 2022 David S. Anderson, All Rights Reserved"
+        return "(c) 2024 David S. Anderson, All Rights Reserved"
     }
 
 }  // class LinuxPlatform

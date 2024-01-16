@@ -1,10 +1,7 @@
 package org.umoja4life.fatashibackend
 
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
-import java.io.File
-import java.io.IOException
 
 private const val DEBUG = false
         const val DUMMYSTUB = "sample-kamusi"
@@ -64,7 +61,7 @@ data class KamusiFormat(
             var kamusiFormat = KamusiFormat()
             val kamusiFormatType = object : TypeToken<KamusiFormat>() {}.type
 
-            if (DEBUG) MyEnvironment.printWarnIfDebug("Reading KamusiFormat file: $f")
+            if (DEBUG) printWarn("KamusiFormat -- Reading: $f")
             kamusiFormat.filename = f  // remember json filename in case of failure
 
             try {

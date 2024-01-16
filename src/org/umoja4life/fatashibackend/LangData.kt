@@ -24,10 +24,10 @@ class LangData(
         var methaliList: Stack<String> = mutableListOf<String>(),  // ordered filenames for methali dicts
         var testList: Stack<String> = mutableListOf<String>()   // ordered filenames for test dicts
 )  {
-    var langProc : LangProcessing = Neutral  // default is nop pre/post processing
-    var kamusiHead:  Kamusi? = null
-    var methaliHead: Kamusi? = null
-    var testHead:    Kamusi? = null
+    @Transient var langProc : LangProcessing = Neutral  // default is nop pre/post processing
+    @Transient var kamusiHead:  Kamusi? = null
+    @Transient var methaliHead: Kamusi? = null
+    @Transient var testHead:    Kamusi? = null
     private var wasnotValid = false  // assume no issue with langData_properties
     private var filename : String = DUMMYSTUB  // will be replaced with actual filename
     private var accumerrors : String = ""  // will accumulate errors
@@ -88,7 +88,7 @@ class LangData(
             var myProperties = LangData()
             val myPropertiesType = object : TypeToken<LangData>() {}.type
 
-            if (DEBUG) if (v) printWarn("Reading LangData properties file: $f")
+            if (DEBUG) printWarn("LangData -- Reading: $f")
 
             try {
                 val text = MyEnvironment.myPlatform.getFile(f)
@@ -101,10 +101,10 @@ class LangData(
                 }
             }
             catch (ex: Exception) {
-                if (DEBUG) printError(ex.toString())
+                if (DEBUG) printError("** LANGDATA **  " + ex.toString())
             }
 
-            if (DEBUG) printWarn(">>>>> post LangData: $f, ${myProperties.filename}; ${myProperties.wasnotValid}; ${myProperties.isNotViable()}")
+            if (DEBUG) printWarn(">>>>> post LangData for: $f, f: ${myProperties.filename}; Valid-err: ${myProperties.wasnotValid}; Viable-err: ${myProperties.isNotViable()}")
             return myProperties
         }  // readJsonConfiguration
 

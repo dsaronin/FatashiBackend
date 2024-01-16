@@ -3,6 +3,7 @@ package org.umoja4life.fatashibackend
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+
 private const val DEBUG = false
 
 const val APP_NAME = "fatashi"    // app name used in prompt
@@ -46,8 +47,15 @@ class FatashiProperties(
 
     fun hasInvalidLangLists() : Boolean = langList.isEmpty()
 
-    fun myStatus() : String = "configurations $filename (${isNotViable().toChar()})\n"
+    fun myStatus() : String = "FatashiProp config-file: $filename, err:${isNotViable().toChar()}\n"
 
+    override fun toString() : String {
+        return "FATASHI-PROPERTIES:\n" +
+        "me: $appName, config: $filename, llc: $listLineCount, clamp: $clampResults, " +
+        "v: $verboseFlag, d: $debugFlag, p: $prodFlag, err: $wasnotValid,\n" +
+        "langs: $langList\n" +
+        myStatus()
+    }
     companion object {
 
         private suspend fun readJsonConfigurations(f: String, v: Boolean = false): FatashiProperties {
@@ -75,8 +83,9 @@ class FatashiProperties(
         }  // readJsonConfiguration
 
         suspend fun fatashiDataSetup(f: String, v: Boolean = false): FatashiProperties {
-            var myProps  : FatashiProperties = readJsonConfigurations(f)
+            var myProps  : FatashiProperties = readJsonConfigurations(f,v)
                 // future expansion?
+            if (DEBUG) println( myProps )
             return myProps
         } // fatashiDataSetup
 
