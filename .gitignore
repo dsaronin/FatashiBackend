@@ -70,3 +70,14 @@ obj/
 .idea/dataSources.xml
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
+
+# project-specific data files
+data/dsa_dictionary.txt
+data/methali_kamusi.txt
+data/kauli_data.txt
+data/swahili-etymology.txt
+data/tuki_english.txt
+data/tuki_kamusi.txt
+data/turkce_dictionary.txt
+data/turkce_phrases.txt
+
