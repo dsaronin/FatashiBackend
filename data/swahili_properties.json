@@ -3,7 +3,7 @@
   "langName": "swahili",
   "langCode": "sw",
   "flagCode": "tz",
-  "kamusiList": ["data/dsa_dictionary.json", "data/tuki_kamusi.json", "data/tuki_english.json", "data/swahili-etymology.json"],
+  "kamusiList": ["data/dsa_dictionary.json", "data/tuki_kamusi.json", "data/tuki_english.json",  "data/zaramo_kamusi.json", "data/swahili-etymology.json"],
   "methaliList": ["data/methali_kamusi.json", "data/kauli_data.json"],
   "testList": ["data/tempdict.json"]
 }
